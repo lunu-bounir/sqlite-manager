@@ -1,0 +1,171 @@
+html {
+  height: 100%;
+}
+body {
+  font-size: 12px;
+  font-family: "Helvetica Neue",Helvetica,sans-serif !important;
+  height: calc(100% - 20px);
+  margin: 10px;
+}
+select,
+input[type=button],
+input[type=submit] {
+  border: none;
+  margin-left: 2px;
+  color: 000;
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+}
+input[type=button]:active,
+input[type=submit]:active {
+  opacity: 0.5;
+}
+
+.list {
+  position: relative;
+}
+.list>span {
+  cursor: pointer;
+}
+.list ul {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  z-index: 2;
+  background-color: #fff;
+  border: solid 1px #ebebeb;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+  list-style: none;
+  padding: 0;
+}
+.list li {
+  padding: 3px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.list li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.list:not(:hover) ul {
+  display: none;
+}
+.list li.separator {
+  pointer-events: none;
+  border-top: solid 1px #ebebeb;
+  height: 5px;
+  margin-top: 5px;
+}
+
+#viewer {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#box div[data-id="command-box"] {
+  position: relative;
+  margin-top: 5px;
+}
+#box div[data-id="command-box"]>span {
+  position: absolute;
+  display: inline-block;
+  width: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d3d3d3;
+  border-right: none;
+}
+#box div[data-id="command-box"]>div {
+  margin-left: 12px;
+  width: calc(100% - 12px);
+}
+#box div[data-id="command-box"] textarea {
+  border: none;
+  background-color: #ffffe8;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+}
+#box div[data-id="command-box"] textarea:focus {
+  background-color: #FFFFD1;
+}
+#box div[data-id=result] {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+#box div[data-id=result][data-type=error] {
+  color: red;
+}
+#box div[data-id=result][data-type=warning] {
+  color: #ccc;
+  font-style: italic;
+}
+#box div[data-id=result] table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+#box div[data-id=result] table tr:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.0.2);
+}
+#box div[data-id=result] thead th,
+#box div[data-id=result] tbody td {
+  white-space: nowrap;
+  padding: 5px;
+}
+#box div[data-id=result] tbody td:empty::before {
+  content: 'NULL';
+  color: #ccc;
+}
+#box div[data-id=result] thead th {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+#notify {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  width: 350px;
+  height: 60px;
+  border: solid 1px #ebebeb;
+}
+#notify[data-hidden=true] {
+  display: none;
+}
+#notify>span {
+  height: 100%;
+}
+#notify>span:first-child {
+  display: inline-block;
+  width: 80px;
+  background: #fff url('../icons/32.png') center center no-repeat;
+  border-right: solid 1px #ebebeb;
+}
+#notify>span:last-child {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ebebeb;
+  padding-left: 10px;
+}
+
+[hbox] {
+  display: flex;
+}
+[vbox] {
+  display: flex;
+  flex-direction: column;
+}
+[pack=center] {
+  justify-content: center;
+}
+[align=start] {
+  align-items: flex-start;
+}
+[align=center] {
+  align-items: center;
+}
+[align=baseline] {
+  align-items: baseline;
+}
+[flex="1"] {
+  flex: 1;
+}

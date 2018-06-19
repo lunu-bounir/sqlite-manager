@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>SQlite Manager</title>
+    <link rel="stylesheet" href="index.css">
+  </head>
+
+  <body data-mode=drag vbox>
+    <div hbox id="tools">
+      <div flex=1>Active Database: <select id="dbs">
+        <option disabled selected>Drop a Database</option>
+      </select></div>
+      <div class="list" data-id="commands">
+        <span>Database Commands</span>
+        <ul>
+          <li data-value='new("%rand%")'>Create a new database</li>
+          <li data-value='download(%id%)'>Download selected database</li>
+          <li data-value='remove(%id%)'>Close an existing database</li>
+          <li class="separator"></li>
+          <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1">Inspect selected database</li>
+          <li class="separator"></li>
+          <li data-value='CREATE TABLE hello (a int, b char);'>CREATE TABLE example</li>
+          <li data-value='INSERT INTO hello VALUES (0, "hello");'>INSERT example</li>
+          <li data-value='SELECT * FROM hello LIMIT 3'>SELECT example</li>
+        </ul>
+      </div>
+    </div>
+    <div id="viewer" flex="1">
+      <div id="box">
+        <template id="command-box">
+          <div data-id="command-box" hbox>
+            <span></span>
+            <div flex="1" vbox>
+              <textarea title="Enter: Run a math.js or SQLite command&#013;Shift + Enter: Go to the next line"></textarea>
+              <div data-id=result vbox align="start"></div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div id=notify hbox>
+      <span></span>
+      <span flex=1>Loading...</span>
+    </div>
+
+    <script src="EventEmitter.js"></script>
+    <script type=module src="api/api.js"></script>
+  </body>
+</html>
