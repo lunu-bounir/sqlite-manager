@@ -62,6 +62,7 @@ sql.init = () => {
     a.href = objectUrl;
     a.download = name;
     a.click();
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl));
   };
 }
 

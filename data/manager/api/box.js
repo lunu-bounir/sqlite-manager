@@ -1,7 +1,16 @@
 /* globals api */
-const box = {};
+const box = {
+  active: null
+};
 
 const root = document.getElementById('box');
+
+root.addEventListener('click', e => {
+  if (e.target.tagName === 'TD') {
+    const tr = e.target.closest('tr');
+    tr.dataset.selected = tr.dataset.selected !== 'true';
+  }
+});
 
 const keys = [
   'ABORT', 'ACTION', 'ADD', 'AFTER', 'ALL', 'ALTER', 'ANALYZE',
@@ -29,6 +38,7 @@ const isSQL = cmd => {
 box.add = () => {
   const t = document.getElementById('command-box');
   const clone = document.importNode(t.content, true);
+  const div = clone.querySelector('[data-id="command-box"]');
   const result = clone.querySelector('[data-id=result]');
   const input = clone.querySelector('textarea');
 
@@ -36,7 +46,9 @@ box.add = () => {
   const resize = () => {
     input.style.height = '20px';
     input.style.height = input.scrollHeight + 'px';
+    input.scrollIntoViewIfNeeded();
   };
+  input.addEventListener('input', resize);
   input.addEventListener('keyup', resize);
   input.addEventListener('paste', resize);
   input.addEventListener('keydown', e => {
@@ -45,14 +57,14 @@ box.add = () => {
     if (target.selectionStart === target.selectionEnd && ['ArrowUp', 'ArrowDown'].indexOf(key) !== -1) {
       // switch to the previous box
       if (key === 'ArrowUp' && target.selectionStart === 0) {
-        const p = target.closest('[data-id="command-box"]').previousElementSibling;
+        const p = div.previousElementSibling;
         if (p && p.dataset.id === 'command-box') {
           p.querySelector('textarea').focus();
         }
       }
       // switch to the next box
       else if (key === 'ArrowDown' && target.selectionStart === target.value.length) {
-        const p = target.closest('[data-id="command-box"]').nextElementSibling;
+        const p = div.nextElementSibling;
         if (p && p.dataset.id === 'command-box') {
           p.querySelector('textarea').focus();
         }
@@ -61,9 +73,9 @@ box.add = () => {
   });
   input.addEventListener('keypress', e => {
     // dealing with Enter
-    if (e.key === 'Enter' && e.shiftKey === false) {
+    if (e.key === 'Enter' && e.shiftKey === false && input.value.trim()) {
       e.preventDefault();
-      const next = e.target.closest('[data-id="command-box"]').nextElementSibling;
+      const next = div.nextElementSibling;
       if (next) {
         next.querySelector('textarea').focus();
       }
@@ -79,9 +91,12 @@ box.add = () => {
       });
     }
   });
+  input.addEventListener('focus', e => box.active = e.target);
   root.appendChild(clone);
   input.focus();
+  resize();
   window.setTimeout(() => result.scrollIntoView());
+  box.active = input;
 };
 
 box.table = ({columns, values}, parent) => {
@@ -89,7 +104,7 @@ box.table = ({columns, values}, parent) => {
   const thead = document.createElement('thead');
   {
     const tr = document.createElement('tr');
-    columns.forEach(name => {
+    ['#', ...columns].forEach(name => {
       const th = document.createElement('th');
       th.textContent = name;
       tr.appendChild(th);
@@ -97,9 +112,10 @@ box.table = ({columns, values}, parent) => {
     thead.appendChild(tr);
   }
   const tbody = document.createElement('tbody');
-  values.forEach(row => {
+  values.forEach((row, i) => {
     const tr = document.createElement('tr');
-    row.forEach(name => {
+    const td = document.createElement('td');
+    [i, ...row].forEach(name => {
       const td = document.createElement('td');
       td.textContent = name;
       tr.appendChild(td);

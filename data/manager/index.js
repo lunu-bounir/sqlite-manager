@@ -18,8 +18,10 @@ api.on('db.file', async(file, name = 'unknown db') => {
 });
 
 var print = (msg, div, type = 'note') => {
-  div.textContent = msg;
-  div.dataset.type = type;
+  const pre = document.createElement('pre');
+  pre.textContent = msg;
+  pre.dataset.type = type;
+  div.appendChild(pre);
 };
 
 api.on('execute.sql', async({cmd, result}) => {
@@ -33,7 +35,7 @@ api.on('execute.sql', async({cmd, result}) => {
         if (pipe.startsWith('import as ')) {
           await api.compute.init();
           const name = pipe.replace(/import as\s+/, '');
-          print(api.compute.import(name, r), result);
+          print(api.compute.import(name, r), result, 'sql');
         }
         else {
           print('Unknown pipe', result, 'error');
@@ -58,13 +60,19 @@ api.on('execute.sql', async({cmd, result}) => {
 api.on('execute.math', async({cmd, result}) => {
   try {
     await api.compute.init();
-    const r = await api.compute.exec(cmd);
-    if (r.type === 'plot') {
+    let r = await api.compute.exec(cmd);
+    console.log(r);
+    r = r.entries ? r : {
+      entries: [r]
+    };
+    const plts = r.entries.filter(o => o.type === 'plot');
+    if (plts.length) {
       await api.chart.init();
-      api.chart.plot(r.x, r.y, result);
+      api.chart.plot(plts, result);
     }
-    else {
-      print(r, result);
+    const rlts = r.entries.filter(o => o.type !== 'plot');
+    if (rlts.length) {
+      print(rlts.join('\n'), result);
     }
   }
   catch (e) {

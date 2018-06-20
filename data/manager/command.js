@@ -1,6 +1,0 @@
-/* globals api */
-'use strict';
-
-{
-
-}

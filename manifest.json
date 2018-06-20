@@ -1,28 +1,36 @@
 {
   "manifest_version": 2,
-  "version": "0.1.0",
-  "name": "extension name",
-  "description": "extension description",
+  "version": "0.1.1",
+  "name": "SQLite Manager",
+  "description": "manage, edit, manipulate, plot and save one or multiple SQLite databases simultaneously",
 
   "icons": {
     "16": "data/icons/16.png",
+    "19": "data/icons/19.png",
     "32": "data/icons/32.png",
+    "38": "data/icons/38.png",
     "48": "data/icons/48.png",
     "64": "data/icons/64.png",
     "128": "data/icons/128.png",
     "256": "data/icons/256.png"
   },
 
+  "permissions": [
+    "storage"
+  ],
+
   "browser_action": {
     "default_icon": {
       "16": "data/icons/16.png",
+      "19": "data/icons/19.png",
       "32": "data/icons/32.png",
+      "38": "data/icons/38.png",
       "48": "data/icons/48.png",
       "64": "data/icons/64.png"
     }
   },
 
-  "homepage_url": "http://add0n.com",
+  "homepage_url": "http://add0n.com/sqlite-manager.html",
 
   "background": {
     "persistent": false,

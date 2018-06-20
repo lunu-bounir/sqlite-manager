@@ -3,9 +3,12 @@ html {
 }
 body {
   font-size: 12px;
-  font-family: "Helvetica Neue",Helvetica,sans-serif !important;
   height: calc(100% - 20px);
   margin: 10px;
+}
+body,
+pre {
+  font-family: "Helvetica Neue",Helvetica,sans-serif !important;
 }
 select,
 input[type=button],
@@ -93,10 +96,17 @@ input[type=submit]:active {
   overflow-x: auto;
   overflow-y: visible;
 }
-#box div[data-id=result][data-type=error] {
+#box div[data-id=result] pre {
+  white-space: pre-line;
+}
+#box div[data-id=result] pre[data-type=error] {
   color: red;
 }
-#box div[data-id=result][data-type=warning] {
+
+#box div[data-id=result] pre[data-type=note] {
+  color: #004aff;
+}
+#box div[data-id=result] pre[data-type=warning] {
   color: #ccc;
   font-style: italic;
 }
@@ -104,8 +114,15 @@ input[type=submit]:active {
   border-collapse: collapse;
   border-spacing: 0;
 }
-#box div[data-id=result] table tr:nth-child(even){
-  background-color: rgba(0, 0, 0, 0.0.2);
+#box div[data-id=result] tr:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.02);
+}
+#box div[data-id=result] tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#box div[data-id=result] tbody tr[data-selected=true] {
+  background-color: #5353c3;
+  color: #fff;
 }
 #box div[data-id=result] thead th,
 #box div[data-id=result] tbody td {
