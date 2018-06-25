@@ -60,6 +60,9 @@ input[type=submit]:active {
   margin-top: 5px;
 }
 
+#tools {
+  margin-bottom: 10px;
+}
 #viewer {
   overflow-x: hidden;
   overflow-y: auto;
@@ -102,7 +105,7 @@ input[type=submit]:active {
 #box div[data-id=result] pre[data-type=error] {
   color: red;
 }
-
+#box div[data-id=result] pre[data-type=sql],
 #box div[data-id=result] pre[data-type=note] {
   color: #004aff;
 }

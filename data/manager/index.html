@@ -14,15 +14,15 @@
       <div class="list" data-id="commands">
         <span>Database Commands</span>
         <ul>
-          <li data-value='new("%rand%")'>Create a new database</li>
-          <li data-value='download(%id%)'>Download selected database</li>
-          <li data-value='remove(%id%)'>Close an existing database</li>
+          <li data-value='db_new("%rand%");'>Create a new database</li>
+          <li data-value='db_download(%id%);'>Download selected database</li>
+          <li data-value='db_remove(%id%);'>Close an existing database</li>
           <li class="separator"></li>
-          <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1">Inspect selected database</li>
+          <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1;">Inspect selected database</li>
           <li class="separator"></li>
           <li data-value='CREATE TABLE hello (a int, b char);'>CREATE TABLE example</li>
           <li data-value='INSERT INTO hello VALUES (0, "hello");'>INSERT example</li>
-          <li data-value='SELECT * FROM hello LIMIT 3'>SELECT example</li>
+          <li data-value='SELECT * FROM hello LIMIT 3;'>SELECT example</li>
         </ul>
       </div>
     </div>
@@ -32,7 +32,7 @@
           <div data-id="command-box" hbox>
             <span></span>
             <div flex="1" vbox>
-              <textarea title="Enter: Run a math.js or SQLite command&#013;Shift + Enter: Go to the next line" spellcheck="false"></textarea>
+              <textarea title="Enter: Run a math.js or SQLite command&#013;Shift + Enter: Go to the next line" spellcheck="false" placeholder="Enter math.js or SQLite commands"></textarea>
               <div data-id=result vbox align="start"></div>
             </div>
           </div>

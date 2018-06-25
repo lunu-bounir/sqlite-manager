@@ -4,11 +4,26 @@ const box = {
 };
 
 const root = document.getElementById('box');
-
 root.addEventListener('click', e => {
   if (e.target.tagName === 'TD') {
     const tr = e.target.closest('tr');
     tr.dataset.selected = tr.dataset.selected !== 'true';
+  }
+});
+const viewer = document.getElementById('viewer');
+viewer.addEventListener('click', ({target}) => {
+  const x = viewer.scrollLeft;
+  const y = viewer.scrollTop;
+  if (target === viewer) {
+    box.active.focus();
+    return viewer.scrollTo(x, y);
+  }
+  else {
+    const div = target.closest('[data-id="command-box"]');
+    if (div && window.getSelection().toString() === '') {
+      div.querySelector('textarea').focus();
+      viewer.scrollTo(x, y);
+    }
   }
 });
 
@@ -32,7 +47,7 @@ const keys = [
   'WHERE', 'WITH', 'WITHOUT'
 ];
 const isSQL = cmd => {
-  return keys.indexOf(cmd.split(' ')[0].toUpperCase()) !== -1;
+  return keys.indexOf(cmd.trim().split(' ')[0].toUpperCase()) !== -1;
 };
 
 box.add = () => {
@@ -48,8 +63,28 @@ box.add = () => {
     input.style.height = input.scrollHeight + 'px';
     input.scrollIntoViewIfNeeded();
   };
+  const autocompete = () => {
+    const v = input.value.substr(0, input.selectionStart).split(' ').pop();
+    if (v.length > 2) {
+      const m = keys.filter(n => n.startsWith(v.toUpperCase())).shift();
+      if (m) {
+        const s = input.selectionStart;
+        let suggest = m.substr(v.length);
+        if (v === v.toLowerCase()) {
+          suggest = suggest.toLowerCase();
+        }
+        document.execCommand('insertText', null, suggest);
+        input.selectionStart = s;
+        input.selectionEnd = s + m.length - v.length;
+
+      }
+    }
+  }
+  input.addEventListener('keyup', () => {
+    resize();
+    // autocompete();
+  });
   input.addEventListener('input', resize);
-  input.addEventListener('keyup', resize);
   input.addEventListener('paste', resize);
   input.addEventListener('keydown', e => {
     const {target, key} = e;

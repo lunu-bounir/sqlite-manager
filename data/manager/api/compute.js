@@ -24,18 +24,18 @@ compute.init = () => {
             y: ay._data
           };
         },
-        new: name => {
+        'db_new': name => {
           api.emit('db.file', undefined, name);
 
           return 'creating a new SQLite database';
         },
-        remove: id => {
+        'db_remove': id => {
           api.sql.close(id);
           api.tools.remove(id);
 
           return 'removing an existing SQLite database';
         },
-        download: id => {
+        'db_download': id => {
           api.sql.export(id, api.tools.name());
 
           return 'downloading a database';

@@ -61,7 +61,6 @@ api.on('execute.math', async({cmd, result}) => {
   try {
     await api.compute.init();
     let r = await api.compute.exec(cmd);
-    console.log(r);
     r = r.entries ? r : {
       entries: [r]
     };
