@@ -76,10 +76,9 @@ box.add = () => {
         document.execCommand('insertText', null, suggest);
         input.selectionStart = s;
         input.selectionEnd = s + m.length - v.length;
-
       }
     }
-  }
+  };
   input.addEventListener('keyup', () => {
     resize();
     // autocompete();
@@ -149,7 +148,6 @@ box.table = ({columns, values}, parent) => {
   const tbody = document.createElement('tbody');
   values.forEach((row, i) => {
     const tr = document.createElement('tr');
-    const td = document.createElement('td');
     [i, ...row].forEach(name => {
       const td = document.createElement('td');
       td.textContent = name;

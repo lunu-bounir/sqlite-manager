@@ -11,19 +11,142 @@
       <div flex=1>Active Database: <select id="dbs">
         <option disabled selected>Drop a Database</option>
       </select></div>
-      <div class="list" data-id="commands">
-        <span>Database Commands</span>
-        <ul>
-          <li data-value='db_new("%rand%");'>Create a new database</li>
-          <li data-value='db_download(%id%);'>Download selected database</li>
-          <li data-value='db_remove(%id%);'>Close an existing database</li>
-          <li class="separator"></li>
-          <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1;">Inspect selected database</li>
-          <li class="separator"></li>
-          <li data-value='CREATE TABLE hello (a int, b char);'>CREATE TABLE example</li>
-          <li data-value='INSERT INTO hello VALUES (0, "hello");'>INSERT example</li>
-          <li data-value='SELECT * FROM hello LIMIT 3;'>SELECT example</li>
-        </ul>
+      <div data-id="commands">
+        <div class="list">
+          <span>SQLite</span>
+          <ul>
+            <li class="disabled">Export</li>
+            <li data-value='SELECT * from table_name limit 10 | import as var_name'>Export to math.js as a matrix<span>SELECT</span></li>
+            <li class="disabled">Managing Tables</li>
+            <li data-value='CREATE TABLE [IF NOT EXISTS] table_name(
+  primary_key INTEGER PRIMARY KEY,
+  column_name type NOT NULL,
+  column_name type NULL,
+  ...
+)'>Create a new table<span>CREATE</span></li>
+            <li data-value='ALTER TABLE table_name RENAME TO new_name'>Rename a table<span>ALTER</span></li>
+            <li data-value='ALTER TABLE table ADD COLUMN column_definition'>Add a new column to a table<span>ALTER</span></li>
+            <li data-value='ALTER TABLE table DROP COLUMN column_name'>Drop an existing column in a table<span>ALTER</span></li>
+            <li data-value='DROP TABLE [IF EXISTS] table_name;'>Drop a table and its data<span>DROP</span></li>
+            <li class="disabled">Managing Indexes</li>
+            <li data-value='CREATE [UNIQUE] INDEX index_name
+  ON table_name (c1,c2,...)'>Creating an index<span>CREATE</span></li>
+            <li data-value='CREATE INDEX index_name ON table_name(expression)'>Create an expression index<span>CREATE</span></li>
+            <li class="disabled">Querying Data</li>
+            <li data-value='SELECT * FROM table_name limit 100'>Query all data from a table<span>SELECT</span></li>
+            <li data-value='SELECT c1, c2
+  FROM table_name'>Query data from the specified column<span>SELECT</span></li>
+            <li data-value='SELECT DISTINCT (c1)
+  FROM table_name'>Query unique rows<span>SELECT</span></li>
+            <li data-value='SELECT *
+  FROM table_name
+  WHERE condition'>Query rows using a WHERE clause<span>SELECT</span></li>
+            <li data-value='SELECT c1 AS new_name
+  FROM table_name'>Rename column in the query’s output<span>SELECT</span></li>
+            <li data-value='SELECT *
+  FROM table_name_1
+  INNER JOIN table_name_2 ON condition'>Query data from multiple tables<span>SELECT</span></li>
+            <li data-value='SELECT COUNT (*)
+  FROM table_name'>Count rows returned by a query<span>SELECT</span></li>
+            <li data-value='SELECT c1, c2
+  FROM table_name
+  ORDER BY c1 ASC [DESC], c2 ASC [DESC],...'>Sort rows using ORDER BY clause<span>SELECT</span></li>
+            <li data-value='SELECT *
+  FROM table_name
+  GROUP BY c1, c2, ...'>Group rows using GROUP BY clause<span>SELECT</span></li>
+            <li data-value='SELECT c1, aggregate(c2)
+  FROM table_name
+  GROUP BY c1
+  HAVING condition'>Filter group of rows using HAVING clause<span>SELECT</span></li>
+            <li class="disabled">Changing Data</li>
+            <li data-value='INSERT INTO table_name(column1,column2,...)
+  VALUES(value_1,value_2,...)'>Insert a row into a table<span>INSERT</span></li>
+            <li data-value='INSERT INTO table_name(column1,column2,...)
+  VALUES(value_1,value_2,...),
+        (value_1,value_2,...),
+        (value_1,value_2,...)...'>Insert multiple rows into a table<span>INSERT</span></li>
+            <li data-value='UPDATE table_name
+  SET c1 = v1,
+      ...'>Update all rows in a table<span>UPDATE</span></li>
+            <li data-value='UPDATE table_name
+  SET c1 = v1,
+      ...
+  WHERE condition'>Update rows that match with a condition<span>UPDATE</span></li>
+            <li data-value='DELETE FROM table'>Delete all rows in a table<span>DELETE</span></li>
+            <li data-value='DELETE FROM table
+  WHERE condition'>Delete rows specified by a condition<span>DELETE</span></li>
+            <li class="disabled">Search</li>
+            <li data-value="SELECT * FROM table
+  WHERE column LIKE '%value%\">Search using LIKE operator<span>SELECT</span></li>
+            <li data-value="SELECT *
+  FROM table
+  WHERE table MATCH 'search_query'">Search using full-text search<span>SELECT</span></li>
+          </ul>
+        </div>
+        <div class="list">
+          <span>Math.js</span>
+          <ul>
+            <li data-value='array = [[2, 0], [-1, 3]]
+matrix = matrix([[7, 1], [-2, 3]])
+
+square(array)
+square(matrix)
+
+add(array, matrix)
+multiply(array, matrix)
+
+ones(2, 3)'>Arrays and matrices<span>matrix</span></li>
+            <li data-value="map(1:10, f(x) = x + 2)">Use functions<span>map</span></li>
+            <li data-value='zeros(3)
+zeros(3, 2)
+zeros(3, "dense")
+
+A = [[1, 2, 3], [4, 5, 6]]
+zeros(size(A))'>Zeros function<span>zeros</span></li>
+            <li data-value='ones(3)
+ones(3, 2)
+ones(3, 2, "dense")
+
+A = [[1, 2, 3], [4, 5, 6]]
+ones(size(A))'>Ones function<span>ones</span></li>
+            <li data-value='range(0, 4)
+range(0, 8, 2)
+range(3, -1, -1)'>Range function<span>range</span></li>
+            <li data-value='size(2.4)
+size(complex(3, 2))
+size(unit("5.3 mm"))
+
+size([0, 1, 2, 3])
+size("hello world")
+
+a = [[0, 1, 2, 3]]
+b = matrix([[0, 1, 2], [3, 4, 5]])
+size(a)
+size(b)
+
+b.size()
+
+c = [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]]
+size(c)'>Size and Dimensions<span>size</span></li>
+            <li data-value='plot(sin(1:10))
+plot(cos(1:10))'>Plot arrays<span>plot</span></li>
+          </ul>
+        </div>
+        <div class="list">
+          <span>Manage</span>
+          <ul>
+            <li data-value='db_new("%rand%")'>Create a new database<span>db_new</span></li>
+            <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
+            <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
+            <li class="separator"></li>
+            <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1">Inspect selected database<span>SELECT</span></li>
+            <li data-value="PRAGMA table_info(table_name)">Inspect table structure<span>PRAGMA</span></li>
+            <li data-value="PRAGMA freelist_count;
+PRAGMA page_count;
+PRAGMA page_size;">Database info<span>PRAGMA</span></li>
+            <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
+          </ul>
+        </div>
       </div>
     </div>
     <div id="viewer" flex="1">

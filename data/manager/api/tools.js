@@ -1,4 +1,4 @@
-/* api */
+/* globals api */
 const select = document.getElementById('dbs');
 const tools = {};
 
@@ -23,11 +23,15 @@ document.querySelector('#tools [data-id=commands]').addEventListener('click', ({
     const msg = value
       .replace('%id%', tools.id)
       .replace('%name%', tools.name)
-      .replace('%rand%', Math.random().toString(36).substring(7) + '.sqlite')
-    api.box.active.focus();
+      .replace('%rand%', Math.random().toString(36).substring(7) + '.sqlite') + '\n';
+
+    const input = api.box.active;
+    input.focus();
     if (document.execCommand('insertText', null, msg) === false) {
-      box.active.value = msg;
-    };
+      input.value = msg;
+      input.dispatchEvent(new Event('input'));
+    }
+    // input.scrollTop = input.scrollHeight;
   }
 });
 

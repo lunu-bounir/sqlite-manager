@@ -19,6 +19,7 @@ chart.plot = (arrs, result) => {
     type: 'scatter',
     data: {
       datasets: arrs.map(({x, y}, i) => ({
+        label: 'Plot #' + (i + 1),
         showLine: true,
         backgroundColor: colors[i][0] + '33',
         borderColor: colors[i][0] + 'FF',

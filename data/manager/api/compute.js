@@ -27,18 +27,18 @@ compute.init = () => {
         'db_new': name => {
           api.emit('db.file', undefined, name);
 
-          return 'creating a new SQLite database';
+          return 'Creating a new SQLite database';
         },
         'db_remove': id => {
           api.sql.close(id);
           api.tools.remove(id);
 
-          return 'removing an existing SQLite database';
+          return 'Removing an existing SQLite database';
         },
         'db_download': id => {
           api.sql.export(id, api.tools.name());
 
-          return 'downloading a database';
+          return 'Downloading the database to the default download directory';
         }
       }, scope);
       api.emit('math.init');

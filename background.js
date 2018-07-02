@@ -7,7 +7,7 @@ chrome.browserAction.onClicked.addListener(() => chrome.tabs.create({
 // FAQs & Feedback
 chrome.storage.local.get({
   'version': null,
-  'faqs': true,
+  'faqs': false,
   'last-update': 0
 }, prefs => {
   const version = chrome.runtime.getManifest().version;

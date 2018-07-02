@@ -61,8 +61,9 @@ sql.init = () => {
     const a = document.createElement('a');
     a.href = objectUrl;
     a.download = name;
+    document.body.appendChild(a);
     a.click();
-    window.setTimeout(() => URL.revokeObjectURL(objectUrl));
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
   };
 }
 

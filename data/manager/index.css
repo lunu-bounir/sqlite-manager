@@ -27,9 +27,13 @@ input[type=submit]:active {
 
 .list {
   position: relative;
+  display: inline-block;
 }
 .list>span {
   cursor: pointer;
+  margin-left: 5px;
+  padding: 5px 10px;
+  background-color: rgba(0,0,0,0.1);
 }
 .list ul {
   position: absolute;
@@ -41,23 +45,44 @@ input[type=submit]:active {
   box-shadow: 1px 1px 1px rgba(0,0,0,0.05);
   list-style: none;
   padding: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 5px 0;
+  visibility: visible;
+  opacity: 1;
 }
 .list li {
   padding: 3px 5px;
   cursor: pointer;
+  display: flex;
   white-space: nowrap;
 }
 .list li:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 .list:not(:hover) ul {
-  display: none;
+  transition-delay: .25s;
+  visibility: hidden;
+  opacity: 0;
 }
 .list li.separator {
   pointer-events: none;
   border-top: solid 1px #ebebeb;
   height: 5px;
   margin-top: 5px;
+}
+.list li.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  justify-content: center;
+  font-weight: 500;
+}
+.list li>span {
+  color: #ccc;
+  margin-left: 10px;
+  flex: 1;
+  text-align: right;
+  pointer-events: none;
 }
 
 #tools {
