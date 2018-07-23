@@ -7,7 +7,7 @@ compute.init = () => {
   if (typeof math === 'undefined') {
     return api.require('venders/math.min.js').then(() => {
       math.import({
-        plot: (ax, ay) => {
+        'plot': (ax, ay) => {
           if (ax) {
             ax = math.squeeze(ax);
           }
@@ -24,21 +24,22 @@ compute.init = () => {
             y: ay._data
           };
         },
+        'history': i => api.history.get(i),
         'db_new': name => {
           api.emit('db.file', undefined, name);
 
-          return 'Creating a new SQLite database';
+          return 'a new SQLite database is created';
         },
         'db_remove': id => {
           api.sql.close(id);
           api.tools.remove(id);
 
-          return 'Removing an existing SQLite database';
+          return 'an existing SQLite database is removed from your browser memory';
         },
         'db_download': id => {
           api.sql.export(id, api.tools.name());
 
-          return 'Downloading the database to the default download directory';
+          return 'the database is being downloaded to the default download directory of your browser';
         }
       }, scope);
       api.emit('math.init');

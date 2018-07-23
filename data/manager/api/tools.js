@@ -33,6 +33,13 @@ document.querySelector('#tools [data-id=commands]').addEventListener('click', ({
     }
     // input.scrollTop = input.scrollHeight;
   }
+  const cmd = target.dataset.cmd;
+  if (cmd === 'close') {
+    window.close();
+  }
+  else if (cmd === 'history.clear') {
+    api.history.clear();
+  }
 });
 
 export default tools;

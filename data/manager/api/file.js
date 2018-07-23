@@ -17,8 +17,8 @@
     [...e.dataTransfer.files].forEach(file => api.emit('db.file', file));
   }, false);
 
-/*  document.querySelector('[type=file]').addEventListener('change', e => {
+  document.querySelector('[type=file]').addEventListener('change', e => {
     [...e.target.files].forEach(file => api.emit('db.file', file));
     e.target.value = '';
-  });*/
+  });
 }

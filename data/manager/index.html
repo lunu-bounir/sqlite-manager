@@ -8,10 +8,36 @@
 
   <body data-mode=drag vbox>
     <div hbox id="tools">
-      <div flex=1>Active Database: <select id="dbs">
-        <option disabled selected>Drop a Database</option>
-      </select></div>
       <div data-id="commands">
+        <div class="list">
+          <span>File</span>
+          <ul>
+            <li><label>Open a local Database<input type="file"></label></li>
+            <li data-cmd="close">Close window</li>
+          </ul>
+        </div>
+        <div class="list">
+          <span>Manage</span>
+          <ul>
+            <li data-value='db_new("%rand%")'>Create a new database<span>db_new</span></li>
+            <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
+            <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
+            <li class="separator"></li>
+            <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1">Inspect selected database<span>SELECT</span></li>
+            <li data-value="PRAGMA table_info(table_name)">Inspect table structure<span>PRAGMA</span></li>
+            <li data-value="PRAGMA freelist_count;
+PRAGMA page_count;
+PRAGMA page_size;">Database info<span>PRAGMA</span></li>
+            <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
+          </ul>
+        </div>
+        <div class="list">
+          <span>History</span>
+          <ul id="history">
+            <li class="separator"></li>
+            <li data-cmd="history.clear">Clear history</li>
+          </ul>
+        </div>
         <div class="list">
           <span>SQLite</span>
           <ul>
@@ -132,22 +158,12 @@ size(c)'>Size and Dimensions<span>size</span></li>
 plot(cos(1:10))'>Plot arrays<span>plot</span></li>
           </ul>
         </div>
-        <div class="list">
-          <span>Manage</span>
-          <ul>
-            <li data-value='db_new("%rand%")'>Create a new database<span>db_new</span></li>
-            <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
-            <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
-            <li class="separator"></li>
-            <li data-value="SELECT name FROM sqlite_master WHERE type IN ('table','view') AND name NOT LIKE 'sqlite_%' ORDER BY 1">Inspect selected database<span>SELECT</span></li>
-            <li data-value="PRAGMA table_info(table_name)">Inspect table structure<span>PRAGMA</span></li>
-            <li data-value="PRAGMA freelist_count;
-PRAGMA page_count;
-PRAGMA page_size;">Database info<span>PRAGMA</span></li>
-            <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
-          </ul>
-        </div>
       </div>
+      <span flex=1></span>
+      <div>Active Database: <select id="dbs">
+        <option disabled selected>Drop a Database</option>
+      </select></div>
+
     </div>
     <div id="viewer" flex="1">
       <div id="box">

@@ -5,7 +5,8 @@ import chart from './chart.js';
 import box from './box.js';
 import compute from './compute.js';
 import tools from './tools.js';
-import './drag.js';
+import history from './history.js';
+import './file.js';
 
 var api = new EventEmitter();
 window.api = api;
@@ -41,6 +42,7 @@ api.chart = chart;
 api.box = box;
 api.compute = compute;
 api.tools = tools;
+api.history = history;
 
 api.append = cmd => {
   let result = [];

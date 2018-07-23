@@ -24,10 +24,15 @@ input[type=button]:active,
 input[type=submit]:active {
   opacity: 0.5;
 }
-
+label input[type=file] {
+  display: none;
+}
 .list {
   position: relative;
   display: inline-block;
+}
+.list label {
+  cursor: pointer;
 }
 .list>span {
   cursor: pointer;
@@ -35,10 +40,16 @@ input[type=submit]:active {
   padding: 5px 10px;
   background-color: rgba(0,0,0,0.1);
 }
+.list[data-disabled=true] {
+  pointer-events: none;
+}
+.list[data-disabled=true]>span {
+  opacity: 0.5;
+}
 .list ul {
   position: absolute;
-  top: 3px;
-  right: 0;
+  top: 5px;
+  left: 5px;
   z-index: 2;
   background-color: #fff;
   border: solid 1px #ebebeb;
@@ -50,12 +61,30 @@ input[type=submit]:active {
   padding: 5px 0;
   visibility: visible;
   opacity: 1;
+  list-style-position: inside;
+}
+.list ul[id=history] {
+  width: 200px;
+}
+.list ul:empty::before {
+  content: 'Empty list';
+  padding: 10px;
+  white-space: nowrap;
+  color: #ababab;
+  font-style: italic;
 }
 .list li {
   padding: 3px 5px;
   cursor: pointer;
-  display: flex;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list ul:not([id=history]) li {
+  display: flex;
+}
+.list li:not(.separator):empty {
+  display: none;
 }
 .list li:hover {
   background-color: rgba(0, 0, 0, 0.1);
@@ -70,6 +99,11 @@ input[type=submit]:active {
   border-top: solid 1px #ebebeb;
   height: 5px;
   margin-top: 5px;
+}
+.list li.separator:empty {
+  height: 0;
+  padding: 2px 0 0 0;
+  margin: 2px 0 0 0;
 }
 .list li.disabled {
   pointer-events: none;
