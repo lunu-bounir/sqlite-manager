@@ -44,19 +44,4 @@ api.compute = compute;
 api.tools = tools;
 api.history = history;
 
-api.append = cmd => {
-  let result = [];
-  let error = '';
-  try {
-    const id = api.tools.active();
-    result = sql.exec(id, cmd);
-  }
-  catch (e) {
-    error = e.message;
-  }
-  api.table.build(cmd, result, error);
-
-  return result;
-};
-
 api.require('./index.js');

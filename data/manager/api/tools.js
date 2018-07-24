@@ -17,20 +17,22 @@ tools.remove = id => {
 tools.id = () => Number(select.value);
 tools.name = () => select.selectedOptions[0].textContent.split(' -> ')[1];
 
-document.querySelector('#tools [data-id=commands]').addEventListener('click', ({target}) => {
+document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', ({target}) => {
   const value = target.dataset.value;
   if (value) {
     const msg = value
       .replace('%id%', tools.id)
-      .replace('%name%', tools.name)
-      .replace('%rand%', Math.random().toString(36).substring(7) + '.sqlite') + '\n';
+      .replace('%name%', tools.name) + '\n';
 
     const input = api.box.active;
+
     input.focus();
     if (document.execCommand('insertText', null, msg) === false) {
       input.value = msg;
       input.dispatchEvent(new Event('input'));
     }
+
+    window.setTimeout(() => input.focus(), 0);
     // input.scrollTop = input.scrollHeight;
   }
   const cmd = target.dataset.cmd;
@@ -39,6 +41,21 @@ document.querySelector('#tools [data-id=commands]').addEventListener('click', ({
   }
   else if (cmd === 'history.clear') {
     api.history.clear();
+  }
+  else if (cmd === 'sql.export') {
+    try {
+      api.sql.export(tools.id(), tools.name());
+    }
+    catch(e) {
+      alert('Create a database then try again.');
+      console.error(e);
+    }
+  }
+  else if (cmd === 'api.emit -> db.file') {
+    api.emit('db.file', undefined, 'my_database.sqlite');
+  }
+  else if (cmd === 'query.file -> click') {
+    document.querySelector('input[type=file]').click();
   }
 });
 

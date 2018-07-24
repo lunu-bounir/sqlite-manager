@@ -24,33 +24,37 @@ var print = (msg, div, type = 'note') => {
   div.appendChild(pre);
 };
 
-api.on('execute.sql', async({cmd, result}) => {
+api.on('execute.sql', ({cmd, result}) => {
   if (cmd) {
     const [sql, pipe] = cmd.split(/\s*\|\s*/);
 
     const id = api.tools.id();
-    try {
-      const r = api.sql.exec(id, sql);
-      if (pipe) {
-        if (pipe.startsWith('import as ')) {
-          await api.compute.init();
-          const name = pipe.replace(/import as\s+/, '');
-          print(api.compute.import(name, r), result, 'sql');
+    result.dataset.mode = 'busy';
+    window.setTimeout(async() => {
+      try {
+        const r = api.sql.exec(id, sql);
+        if (pipe) {
+          if (pipe.startsWith('import as ')) {
+            await api.compute.init();
+            const name = pipe.replace(/import as\s+/, '');
+            print(api.compute.import(name, r), result, 'sql');
+          }
+          else {
+            print('Unknown pipe', result, 'error');
+          }
         }
         else {
-          print('Unknown pipe', result, 'error');
+          r.forEach(o => api.box.table(o, result));
+          if (r.length === 0) {
+            print('no output', result, 'warning');
+          }
         }
       }
-      else {
-        r.forEach(o => api.box.table(o, result));
-        if (r.length === 0) {
-          print('no output', result, 'warning');
-        }
+      catch (e) {
+        print(e.message, result, 'error');
       }
-    }
-    catch (e) {
-      print(e.message, result, 'error');
-    }
+      delete result.dataset.mode;
+    }, 10);
   }
   else {
     print('Empty command', result, 'warning');

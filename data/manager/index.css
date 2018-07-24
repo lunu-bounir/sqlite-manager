@@ -24,7 +24,7 @@ input[type=button]:active,
 input[type=submit]:active {
   opacity: 0.5;
 }
-label input[type=file] {
+input[type=file] {
   display: none;
 }
 .list {
@@ -55,13 +55,13 @@ label input[type=file] {
   border: solid 1px #ebebeb;
   box-shadow: 1px 1px 1px rgba(0,0,0,0.05);
   list-style: none;
+  list-style-position: inside;
   padding: 0;
   max-height: 80vh;
   overflow-y: auto;
   padding: 5px 0;
   visibility: visible;
   opacity: 1;
-  list-style-position: inside;
 }
 .list ul[id=history] {
   width: 200px;
@@ -93,6 +93,10 @@ label input[type=file] {
   transition-delay: .25s;
   visibility: hidden;
   opacity: 0;
+}
+/* hide the menu when user clicks */
+.list:active ul {
+  display: none;
 }
 .list li.separator {
   pointer-events: none;
@@ -142,7 +146,8 @@ label input[type=file] {
 }
 #box div[data-id="command-box"]>div {
   margin-left: 12px;
-  width: calc(100% - 12px);
+  /* Firefox */
+  max-width: calc(100% - 12px);
 }
 #box div[data-id="command-box"] textarea {
   border: none;
@@ -153,6 +158,12 @@ label input[type=file] {
 }
 #box div[data-id="command-box"] textarea:focus {
   background-color: #FFFFD1;
+}
+#box div[data-id=result][data-mode=busy] {
+  background-image: url(loading.gif);
+  background-repeat: no-repeat;
+  background-position: right center;
+  height: 22px;
 }
 #box div[data-id=result] {
   overflow-x: auto;

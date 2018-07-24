@@ -7,19 +7,23 @@
   </head>
 
   <body data-mode=drag vbox>
+    <input type="file">
     <div hbox id="tools">
       <div data-id="commands">
         <div class="list">
           <span>File</span>
           <ul>
-            <li><label>Open a local Database<input type="file"></label></li>
+            <li data-cmd="query.file -> click">Open a Database</li>
+            <li data-cmd="api.emit -> db.file">Create a new Database</li>
+            <li data-cmd="sql.export">Download active Database</li>
+            <li class="separator"></li>
             <li data-cmd="close">Close window</li>
           </ul>
         </div>
         <div class="list">
           <span>Manage</span>
           <ul>
-            <li data-value='db_new("%rand%")'>Create a new database<span>db_new</span></li>
+            <li data-value='db_new("my_database.sqlite")'>Create a new database<span>db_new</span></li>
             <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
             <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
             <li class="separator"></li>
