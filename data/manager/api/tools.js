@@ -15,7 +15,12 @@ tools.remove = id => {
 };
 
 tools.id = () => Number(select.value);
-tools.name = () => select.selectedOptions[0].textContent.split(' -> ')[1];
+tools.name = () => {
+  if (select.selectedOptions[0]) {
+    return select.selectedOptions[0].textContent.split(' -> ')[1];
+  }
+  return 'unknown';
+};
 
 document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', ({target}) => {
   const value = target.dataset.value;
@@ -25,7 +30,6 @@ document.querySelector('#tools [data-id=commands]').addEventListener('mousedown'
       .replace('%name%', tools.name) + '\n';
 
     const input = api.box.active;
-
     input.focus();
     if (document.execCommand('insertText', null, msg) === false) {
       input.value = msg;
@@ -39,17 +43,14 @@ document.querySelector('#tools [data-id=commands]').addEventListener('mousedown'
   if (cmd === 'close') {
     window.close();
   }
+  else if (cmd === 'box.clean') {
+    api.box.clean();
+  }
   else if (cmd === 'history.clear') {
     api.history.clear();
   }
   else if (cmd === 'sql.export') {
-    try {
-      api.sql.export(tools.id(), tools.name());
-    }
-    catch(e) {
-      alert('Create a database then try again.');
-      console.error(e);
-    }
+    api.sql.export(tools.id(), tools.name()).catch(e => alert('Did you have an open database?\n\n--\n' + e));
   }
   else if (cmd === 'api.emit -> db.file') {
     api.emit('db.file', undefined, 'my_database.sqlite');

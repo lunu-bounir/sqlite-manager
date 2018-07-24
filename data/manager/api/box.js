@@ -146,19 +146,41 @@ box.table = ({columns, values}, parent) => {
     thead.appendChild(tr);
   }
   const tbody = document.createElement('tbody');
-  values.forEach((row, i) => {
-    const tr = document.createElement('tr');
-    [i, ...row].forEach(name => {
-      const td = document.createElement('td');
-      td.textContent = name;
-      tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
-
   table.appendChild(thead);
   table.appendChild(tbody);
   parent.appendChild(table);
+
+  const add = (row, i) => {
+    if (row) {
+      const tr = document.createElement('tr');
+      [i, ...row].forEach(name => {
+        const td = document.createElement('td');
+        td.textContent = name;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    }
+  };
+  if (values.length > 500) {
+    const msg = `Printing a large table in the view could make your browser unresponsive for several minutes. Consider appending "LIMIT 100" to your SQL command to prevent a large data being returned.
+
+Press "Cancel" to abort the command execution.`;
+    if (confirm(msg)) {
+      values.forEach(add);
+    }
+    else {
+      table.textContent = 'aborted';
+    }
+  }
+  else {
+    values.forEach(add);
+  }
+};
+
+box.clean = () => {
+  [...root.querySelectorAll('[data-id=command-box]')].slice(0, -1)
+    .forEach(e => e.remove());
+  box.active = root.querySelector('[data-id=command-box] textarea');
 };
 
 // https://gist.githubusercontent.com/hsablonniere/2581101/raw/3634e38ed9393bf0ae987ce9318f11eefca12020/index.js

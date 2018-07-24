@@ -7,9 +7,7 @@ api.box.add();
 
 api.on('db.file', async(file, name = 'unknown db') => {
   try {
-    const {init, open} = api.sql;
-    await init();
-    const id = await open(file);
+    const id = await api.sql.open(file);
     api.tools.add(file ? file.name : name, id);
   }
   catch (e) {
@@ -24,37 +22,36 @@ var print = (msg, div, type = 'note') => {
   div.appendChild(pre);
 };
 
-api.on('execute.sql', ({cmd, result}) => {
+api.on('execute.sql', async({cmd, result}) => {
   if (cmd) {
     const [sql, pipe] = cmd.split(/\s*\|\s*/);
 
     const id = api.tools.id();
     result.dataset.mode = 'busy';
-    window.setTimeout(async() => {
-      try {
-        const r = api.sql.exec(id, sql);
-        if (pipe) {
-          if (pipe.startsWith('import as ')) {
-            await api.compute.init();
-            const name = pipe.replace(/import as\s+/, '');
-            print(api.compute.import(name, r), result, 'sql');
-          }
-          else {
-            print('Unknown pipe', result, 'error');
-          }
+
+    try {
+      const r = await api.sql.exec(id, sql);
+      if (pipe) {
+        if (pipe.startsWith('import as ')) {
+          await api.compute.init();
+          const name = pipe.replace(/import as\s+/, '');
+          print(api.compute.import(name, r), result, 'sql');
         }
         else {
-          r.forEach(o => api.box.table(o, result));
-          if (r.length === 0) {
-            print('no output', result, 'warning');
-          }
+          print('Unknown pipe', result, 'error');
         }
       }
-      catch (e) {
-        print(e.message, result, 'error');
+      else {
+        r.forEach(o => api.box.table(o, result));
+        if (r.length === 0) {
+          print('no output', result, 'warning');
+        }
       }
-      delete result.dataset.mode;
-    }, 10);
+    }
+    catch (e) {
+      print(e.message, result, 'error');
+    }
+    delete result.dataset.mode;
   }
   else {
     print('Empty command', result, 'warning');

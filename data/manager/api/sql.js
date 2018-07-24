@@ -1,23 +1,60 @@
-/* globals api, SQL */
+/* globals api */
 const sql = {};
-
-sql.init = () => {
-  if (typeof SQL === 'undefined') {
-    return api.require('venders/sql.js').then(() => api.emit('sql.init'));
-  }
-  return Promise.resolve();
-};
+const worker = new Worker('api/worker.js');
+let index = 0;
 
 {
-  const dbs = [];
+  const tmp = {};
+
+  worker.onmessage = ({data}) => {
+    if (data.error) {
+      tmp[data.tId].reject(new Error(data.error));
+    }
+    else if (data.action === 'open') {
+      tmp[data.tId].resolve();
+    }
+    else if (data.action === 'export') {
+      const blob = new Blob([data.buffer], {type: 'application/x-sqlite3'});
+      const objectUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = objectUrl;
+      a.download = data.filename;
+      document.body.appendChild(a);
+      a.click();
+      window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+      tmp[data.tId].resolve();
+    }
+    else if (data.action === 'exec') {
+      tmp[data.tId].resolve(data.results);
+    }
+  };
+  worker.onerror = e => alert(e.message);
+
+  const post = (id, data) => {
+    const tId = Math.random();
+    return new Promise((resolve, reject) => {
+      tmp[tId] = {
+        resolve,
+        reject
+      };
+
+      worker.postMessage(Object.assign(data, {
+        id,
+        tId
+      }));
+    }).finally(() => {
+      delete tmp[tId];
+    });
+  };
   // open from file
-  const open = (file, id) => new Promise(resolve => {
+  const open = (file, id) => new Promise((resolve, reject) => {
     const r = new FileReader();
     r.onload = () => {
       const bytes = new Uint8Array(r.result);
-      dbs[id] = new SQL.Database(bytes);
-
-      resolve();
+      post(id, {
+        action: 'open',
+        buffer: bytes
+      }).then(resolve, reject);
     };
     r.readAsArrayBuffer(file);
   });
@@ -26,12 +63,15 @@ sql.init = () => {
     if (file) {
       return open(file, id);
     }
-    dbs[id] = new SQL.Database();
-    return Promise.resolve();
+    return post(id, {
+      id,
+      action: 'open'
+    });
   };
   // open and report
   sql.open = file => {
-    const id = dbs.length;
+    const id = index;
+    index += 1;
 
     return openc(file, id).then(() => {
       api.emit('db.ready');
@@ -40,31 +80,19 @@ sql.init = () => {
     });
   };
 
-  sql.exec = (id = 0, ...args) => {
-    if (dbs[id]) {
-      return dbs[id].exec(...args);
-    }
-    throw Error('Database is not found');
-  };
-  sql.each = (id = 0, ...args) => dbs[id].each(...args);
+  sql.exec = (id = 0, sql) => post(id, {
+    action: 'exec',
+    sql
+  });
 
-  sql.list = () => dbs;
+  sql.close = (id = 0) => post(id, {
+    action: 'close'
+  });
 
-  sql.close = (id = 0) => {
-    dbs[id].close();
-    dbs[id] = null;
-  };
-
-  sql.export = (id = 0, name = 'unknown name') => {
-    const blob = new Blob([dbs[id].export()], {type: 'application/x-sqlite3'});
-    const objectUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = objectUrl;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-  };
+  sql.export = (id = 0, filename = 'unknown_name.sqlite') => post(id, {
+    action: 'export',
+    filename
+  });
 }
 
 export default sql;

@@ -30,6 +30,7 @@ input[type=file] {
 .list {
   position: relative;
   display: inline-block;
+  user-select: none;
 }
 .list label {
   cursor: pointer;
