@@ -37,5 +37,11 @@
     "scripts": [
       "background.js"
     ]
+  },
+  "applications": {
+    "gecko": {
+      "id": "{7d2676a5-0546-4e2a-9019-aa9d8345be1e}",
+      "strict_min_version": "59.0"
+    }
   }
 }

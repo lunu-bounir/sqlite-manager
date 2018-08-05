@@ -1,7 +1,7 @@
 /* globals SQL */
 'use strict';
 
-self.importScripts('../venders/sql.js');
+self.importScripts('../vendor/sql.js');
 
 var dbs = {};
 

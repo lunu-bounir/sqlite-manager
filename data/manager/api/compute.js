@@ -5,7 +5,7 @@ const scope = {};
 
 compute.init = () => {
   if (typeof math === 'undefined') {
-    return api.require('venders/math.min.js').then(() => {
+    return api.require('vendor/math.min.js').then(() => {
       math.import({
         'plot': (ax, ay) => {
           if (ax) {

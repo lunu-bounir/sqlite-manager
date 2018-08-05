@@ -4,7 +4,7 @@ const colors = [["#69d2e7","#a7dbd8","#e0e4cc","#f38630","#fa6900"],["#fe4365","
 
 chart.init = () => {
   if (typeof Chart === 'undefined') {
-    return api.require('venders/Chart.min.js').then(() => api.emit('chart.init'));
+    return api.require('vendor/Chart.min.js').then(() => api.emit('chart.init'));
   }
   return Promise.resolve();
 };
