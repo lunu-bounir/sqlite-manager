@@ -24,7 +24,7 @@ var print = (msg, div, type = 'note') => {
 
 api.on('execute.sql', async({cmd, result}) => {
   if (cmd) {
-    const [sql, pipe] = cmd.split(/\s*\|\s*/);
+    const [sql, pipe] = cmd.split(/\s* \| import as \s*/);
 
     const id = api.tools.id();
     result.dataset.mode = 'busy';
@@ -32,14 +32,8 @@ api.on('execute.sql', async({cmd, result}) => {
     try {
       const r = await api.sql.exec(id, sql);
       if (pipe) {
-        if (pipe.startsWith('import as ')) {
-          await api.compute.init();
-          const name = pipe.replace(/import as\s+/, '');
-          print(api.compute.import(name, r), result, 'sql');
-        }
-        else {
-          print('Unknown pipe', result, 'error');
-        }
+        await api.compute.init();
+        print(api.compute.import(pipe, r), result, 'sql');
       }
       else {
         r.forEach(o => api.box.table(o, result));
