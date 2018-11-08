@@ -7,6 +7,7 @@ import compute from './compute.js';
 import tools from './tools.js';
 import history from './history.js';
 import './file.js';
+import Table from './table.js';
 
 var api = new EventEmitter();
 window.api = api;
@@ -43,5 +44,6 @@ api.box = box;
 api.compute = compute;
 api.tools = tools;
 api.history = history;
+api.Table = Table;
 
 api.require('./index.js');

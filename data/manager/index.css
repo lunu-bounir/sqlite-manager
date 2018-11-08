@@ -15,8 +15,8 @@ input[type=button],
 input[type=submit] {
   border: none;
   margin-left: 2px;
-  color: 000;
-  background-color: rgba(0, 0, 0, 0.1);
+  color: #000;
+  background-color: #dedede;
   cursor: pointer;
   outline: none;
 }
@@ -187,6 +187,7 @@ input[type=file] {
 #box div[data-id=result] table {
   border-collapse: collapse;
   border-spacing: 0;
+  position: relative;
 }
 #box div[data-id=result] tr:nth-child(even){
   background-color: rgba(0, 0, 0, 0.02);
@@ -196,6 +197,10 @@ input[type=file] {
 }
 #box div[data-id=result] tbody tr[data-selected=true] {
   background-color: #5353c3;
+  color: #fff;
+}
+#box div[data-id=result] tbody tr[data-editor=true] {
+  background-color: #d157be;
   color: #fff;
 }
 #box div[data-id=result] thead th,
@@ -238,6 +243,27 @@ input[type=file] {
   padding-left: 10px;
 }
 
+#editor {
+  position: absolute;
+  background-color: #fff;
+  padding: 2px;
+  box-shadow: 1px 1px 2px 1px #e1dede;
+}
+#editor textarea {
+  width: 300px;
+  border: none;
+  padding: 5px;
+}
+#editor input {
+  padding: 5px 10px;
+}
+#editor input:first-child {
+  margin-bottom: 2px;
+}
+#editor[data-visible=false] {
+  display: none;
+}
+
 [hbox] {
   display: flex;
 }
@@ -256,6 +282,9 @@ input[type=file] {
 }
 [align=baseline] {
   align-items: baseline;
+}
+[align=end] {
+  align-items: flex-end;
 }
 [flex="1"] {
   flex: 1;

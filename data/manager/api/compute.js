@@ -49,7 +49,7 @@ compute.init = () => {
 };
 
 compute.import = (name, aa) => compute.exec(`${name.trim()} = squeeze(${JSON.stringify(
-  aa.map(a => a.values)
+  aa.values
 )})`);
 
 compute.exec = exp => {

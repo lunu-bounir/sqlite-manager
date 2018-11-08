@@ -5,7 +5,7 @@ const box = {
 
 const root = document.getElementById('box');
 root.addEventListener('click', e => {
-  if (e.target.tagName === 'TD') {
+  if (e.target.tagName === 'TD' && window.getSelection().toString() === '') {
     const tr = e.target.closest('tr');
     tr.dataset.selected = tr.dataset.selected !== 'true';
   }
@@ -16,7 +16,7 @@ viewer.addEventListener('click', ({target}) => {
   const y = viewer.scrollTop;
   if (target === viewer) {
     box.active.focus();
-    return viewer.scrollTo(x, y);
+    viewer.scrollTo(x, y);
   }
   else {
     const div = target.closest('[data-id="command-box"]');
@@ -59,30 +59,14 @@ box.add = () => {
 
   // RESIZE
   const resize = () => {
+    const scrollTop = viewer.scrollTop;
     input.style.height = '20px';
     input.style.height = input.scrollHeight + 'px';
     input.scrollIntoViewIfNeeded();
+    // keep the scroll top position; test with very long content
+    viewer.scrollTop = scrollTop;
   };
-  const autocompete = () => {
-    const v = input.value.substr(0, input.selectionStart).split(' ').pop();
-    if (v.length > 2) {
-      const m = keys.filter(n => n.startsWith(v.toUpperCase())).shift();
-      if (m) {
-        const s = input.selectionStart;
-        let suggest = m.substr(v.length);
-        if (v === v.toLowerCase()) {
-          suggest = suggest.toLowerCase();
-        }
-        document.execCommand('insertText', null, suggest);
-        input.selectionStart = s;
-        input.selectionEnd = s + m.length - v.length;
-      }
-    }
-  };
-  input.addEventListener('keyup', () => {
-    resize();
-    // autocompete();
-  });
+  input.addEventListener('keyup', resize);
   input.addEventListener('input', resize);
   input.addEventListener('paste', resize);
   input.addEventListener('keydown', e => {
@@ -120,7 +104,7 @@ box.add = () => {
       delete result.dataset.type;
 
       api.emit(isSQL(input.value) ? 'execute.sql' : 'execute.math', {
-        cmd: input.value,
+        query: input.value,
         result
       });
     }
@@ -133,8 +117,11 @@ box.add = () => {
   box.active = input;
 };
 
-box.table = ({columns, values}, parent) => {
+box.table = (index, sql, {columns, values}, parent) => {
   const table = document.createElement('table');
+  table.sql = sql;
+  table.columns = columns;
+  table.index = index;
   const thead = document.createElement('thead');
   {
     const tr = document.createElement('tr');
@@ -153,8 +140,10 @@ box.table = ({columns, values}, parent) => {
   const add = (row, i) => {
     if (row) {
       const tr = document.createElement('tr');
-      [i, ...row].forEach(name => {
+      tr.index = i;
+      [i + 1, ...row].forEach((name, i) => {
         const td = document.createElement('td');
+        td.index = i;
         td.textContent = name;
         tr.appendChild(td);
       });
@@ -175,12 +164,18 @@ Press "Cancel" to abort the command execution.`;
   else {
     values.forEach(add);
   }
+  const tools = new api.Table(table, columns, values);
+  tools.add();
 };
 
 box.clean = () => {
   [...root.querySelectorAll('[data-id=command-box]')].slice(0, -1)
     .forEach(e => e.remove());
   box.active = root.querySelector('[data-id=command-box] textarea');
+};
+
+box.last = () => {
+  return document.querySelector('[data-id=command-box]:last-child textarea');
 };
 
 // https://gist.githubusercontent.com/hsablonniere/2581101/raw/3634e38ed9393bf0ae987ce9318f11eefca12020/index.js

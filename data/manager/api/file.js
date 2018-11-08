@@ -2,8 +2,15 @@
 {
   const body = document.body;
 
-  body.addEventListener('dragenter', e => e.target.classList.add('over'), false);
-  body.addEventListener('dragleave', e => e.target.classList.remove('over'), false);
+  const process = files => {
+    files.filter(f => f.name.toLowerCase().endsWith('.csv') === false)
+      .forEach(file => api.emit('db.file', file));
+    files.filter(f => f.name.toLowerCase().endsWith('.csv') === true)
+      .forEach(file => api.emit('csv.file', file));
+  };
+
+  body.addEventListener('dragenter', e => e.target.classList && e.target.classList.add('over'), false);
+  body.addEventListener('dragleave', e => e.target.classList && e.target.classList.remove('over'), false);
   body.addEventListener('dragend', () => body.classList.remove('over'), false);
   body.addEventListener('dragover', e => {
     e.preventDefault();
@@ -14,11 +21,11 @@
     e.preventDefault();
     e.stopPropagation();
 
-    [...e.dataTransfer.files].forEach(file => api.emit('db.file', file));
+    process([...e.dataTransfer.files]);
   }, false);
 
   document.querySelector('[type=file]').addEventListener('change', e => {
-    [...e.target.files].forEach(file => api.emit('db.file', file));
+    process([...e.target.files]);
     e.target.value = '';
   });
 }

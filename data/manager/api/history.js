@@ -37,9 +37,9 @@ const history = {};
     root.insertBefore(fragment, sep);
 
     update();
-    const append = ({cmd}) => {
-      cmd = cmd.trim();
-      historyArray.unshift(cmd);
+    const append = ({query}) => {
+      query = query.trim();
+      historyArray.unshift(query);
       historyArray = historyArray.filter((s, i, l) => s && l.indexOf(s) === i);
       historyArray = historyArray.slice(0, historyLength);
       chrome.storage.local.set({

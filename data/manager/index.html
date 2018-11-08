@@ -190,6 +190,14 @@ plot(cos(1:10))'>Plot arrays<span>plot</span></li>
       <span flex=1>Loading...</span>
     </div>
 
+    <div id="editor" data-visible=false hbox align=end>
+      <textarea rows="6"></textarea>
+      <div vbox>
+        <input type="button" value="Close" data-cmd="close"/>
+        <input type="button" value="Execute" data-cmd="execute"/>
+      </div>
+    </div>
+
     <script src="EventEmitter.js"></script>
     <script type=module src="api/api.js"></script>
   </body>

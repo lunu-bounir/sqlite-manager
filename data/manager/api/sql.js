@@ -1,4 +1,4 @@
-/* globals api */
+/* globals api, sqliteParser */
 const sql = {};
 const worker = new Worker('api/worker.js');
 let index = 0;
@@ -94,5 +94,17 @@ let index = 0;
     filename
   });
 }
+
+sql.parse = {
+  init: () => {
+    if (typeof sqliteParser === 'undefined') {
+      return api.require('vendor/sqlite-parser.js');
+    }
+    else {
+      return Promise.resolve();
+    }
+  },
+  exec: query => sqliteParser(query)
+};
 
 export default sql;
