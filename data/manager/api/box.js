@@ -23,6 +23,8 @@ viewer.addEventListener('click', ({target}) => {
     if (div && window.getSelection().toString() === '') {
       div.querySelector('textarea').focus();
       viewer.scrollTo(x, y);
+      // when editor disappears by clicking outside of the editor area;
+      window.setTimeout(() => viewer.scrollTo(x, y));
     }
   }
 });

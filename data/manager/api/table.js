@@ -26,10 +26,10 @@ editor.addEventListener('click', e => {
     api.sql.exec(id, query).then(() => {
       try {
         const ast = api.sql.parse.exec(query);
-        const table = api.tools.sql.toColumns([ast.statement[0].into.name]);
-        const name = api.tools.sql.toColumns([ast.statement[0].set[0].target.name]);
-        const key = api.tools.sql.toColumns([ast.statement[0].where[0].left.name]);
-        const value = api.tools.sql.toValues([ast.statement[0].where[0].right.name]);
+        const table = api.format.sql.toColumns([ast.statement[0].into.name]);
+        const name = api.format.sql.toColumns([ast.statement[0].set[0].target.name]);
+        const key = api.format.sql.toColumns([ast.statement[0].where[0].left.name]);
+        const value = api.format.sql.toValues([ast.statement[0].where[0].right.name]);
 
         api.sql.exec(id, `SELECT ${name} FROM ${table} WHERE ${key} = ${value} limit 1`).then(r => {
           try {
@@ -83,21 +83,21 @@ const Table = function(root, columns, values) {
         const obj = this.parse(this.root.index, tr.index, td.index);
 
         let statement = 'UPDATE ';
-        statement += api.tools.sql.toColumns([obj.table]);
+        statement += api.format.sql.toColumns([obj.table]);
         statement += ' SET ';
-        statement += api.tools.sql.toColumns([obj.selected.name]);
+        statement += api.format.sql.toColumns([obj.selected.name]);
         statement += ' = ';
         let start = statement.length;
-        statement += api.tools.sql.toValues([obj.selected.value]);
+        statement += api.format.sql.toValues([obj.selected.value]);
         let end = statement.length;
         if (statement.endsWith('"')) {
           start += 1;
           end -= 1;
         }
         statement += ' WHERE ';
-        statement += api.tools.sql.toColumns([obj.id.name]);
+        statement += api.format.sql.toColumns([obj.id.name]);
         statement += ' = ';
-        statement += api.tools.sql.toValues([obj.id.value]);
+        statement += api.format.sql.toValues([obj.id.value]);
 
         window.setTimeout(() => {
           editor.input.value = statement;
@@ -111,7 +111,7 @@ const Table = function(root, columns, values) {
         });
       }
       catch (e) {
-        window.alert('Cannot edit this value\n\n' + e.message);
+        api.notify('Cannot edit this value: ' + e.message);
       }
     }
   });
@@ -121,7 +121,7 @@ Table.prototype.add = function() {
   input.type = 'button';
   input.value = 'Export';
   input.onclick = () => {
-    const content = api.tools.csv.toString([this.columns, ...this.values]);
+    const content = api.format.csv.toString([this.columns, ...this.values]);
     const blob = new Blob([content], {type: 'text/csv'});
     const objectURL = URL.createObjectURL(blob);
     const link = document.createElement('a');

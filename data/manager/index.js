@@ -17,8 +17,7 @@ api.on('db.file', async(file, name = 'unknown db') => {
 api.on('csv.file', file => {
   const reader = new FileReader();
   reader.onload = async() => {
-    const [columns, ...values] = api.tools.csv.toArray(reader.result);
-    console.log(columns, values);
+    const [columns, ...values] = api.format.csv.toArray(reader.result);
     // find the table name
     let table = 'my_table';
     try {
@@ -27,8 +26,8 @@ api.on('csv.file', file => {
     }
     catch (e) {}
     let statement = 'INSERT OR REPLACE INTO ' + table + ' ';
-    statement += `(${api.tools.sql.toColumns(columns)}) VALUES \n  `;
-    statement += values.map(vs => `(${api.tools.sql.toValues(vs)})`).join(',\n  ') + ';';
+    statement += `(${api.format.sql.toColumns(columns)}) VALUES \n  `;
+    statement += values.map(vs => `(${api.format.sql.toValues(vs)})`).join(',\n  ') + ';';
     const input = api.box.last();
     input.value = statement;
     input.dispatchEvent(new Event('input'));
@@ -65,9 +64,9 @@ api.on('execute.sql', async({query, result}) => {
       result.dataset.mode = 'busy';
       await api.sql.parse.init();
       try {
-        const ast = api.sql.parse.exec(query);
+        const ast = query.length < 1000 ? api.sql.parse.exec(query) : {};
         result.ast = ast;
-        const r = await api.sql.exec(id, query);
+        const r = await api.sql.exec(id, query) || [];
         r.forEach(async(o, i) => {
           if (pipes[i]) {
             await api.compute.init();
@@ -112,7 +111,7 @@ api.on('execute.math', async({query, result}) => {
     }
   }
   catch (e) {
-    console.log(e);
+    console.error(e);
     print(e.message, result, 'error');
   }
 });

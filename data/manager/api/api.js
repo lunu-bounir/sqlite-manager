@@ -6,6 +6,7 @@ import box from './box.js';
 import compute from './compute.js';
 import tools from './tools.js';
 import history from './history.js';
+import format from './format.js';
 import './file.js';
 import Table from './table.js';
 
@@ -44,6 +45,7 @@ api.box = box;
 api.compute = compute;
 api.tools = tools;
 api.history = history;
+api.format = format;
 api.Table = Table;
 
 api.require('./index.js');
