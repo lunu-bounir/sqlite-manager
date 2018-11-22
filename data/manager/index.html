@@ -160,8 +160,23 @@ b.size()
 
 c = [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]]
 size(c)'>Size and Dimensions<span>size</span></li>
+
+          </ul>
+        </div>
+        <div class="list">
+          <span>Chart.js</span>
+          <ul>
             <li data-value='plot(sin(1:10))
-plot(cos(1:10))'>Plot arrays<span>plot</span></li>
+plot(sin(1:10), "steppedLine=after&backgroundColor=transparent&borderColor=gray&borderWidth=2&label=Step Function")'>Line chart<span>plot</span></li>
+            <li data-value='plot(1:10, sin(1:10), "type=scatter&showLine=false&borderColor=red&borderWidth=5")'>Scatter chart<span>plot</span></li>
+            <li data-value='plot(["group a", "group b", "group c"], [100, 50, 0], "type=bar")
+plot([10, 20, 30], "type=bar")
+plot([60, 20, 100], "type=bar")'>Bar chart<span>plot</span></li>
+            <li data-value='plot(["part 1", "part 2", "part 3"], [10, 20, 30], "type=pie")
+plot([30, 30, 30], "type=pie")'>Pie chart<span>plot</span></li>
+            <li data-value='plot(["part 1", "part 2", "part 3"], [10, 20, 30], "type=doughnut")
+plot([30, 30, 30], "type=doughnut")'>Doughnut chart<span>plot</span></li>
+          </ul>
           </ul>
         </div>
       </div>

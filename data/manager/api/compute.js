@@ -7,10 +7,13 @@ compute.init = () => {
   if (typeof math === 'undefined') {
     return api.require('vendor/math.min.js').then(() => {
       math.import({
-        'plot': (ax, ay) => {
-          if (ax) {
-            ax = math.squeeze(ax);
+        'plot': (ax, ay, query) => {
+          ax = math.squeeze(ax);
+          if (typeof ay === 'string') {
+            query = ay;
+            ay = null;
           }
+
           if (ay) {
             ay = math.squeeze(ay);
           }
@@ -21,7 +24,8 @@ compute.init = () => {
           return {
             type: 'plot',
             x: ax._data,
-            y: ay._data
+            y: ay._data,
+            query
           };
         },
         'history': i => api.history.get(i),
