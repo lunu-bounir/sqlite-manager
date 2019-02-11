@@ -5,8 +5,8 @@ const history = {};
 
 {
   let historyArray = [];
-  let historyLength = 10;
-  let lis = [];
+  let historyLength = 30;
+  const lis = [];
   const root = document.getElementById('history');
 
 

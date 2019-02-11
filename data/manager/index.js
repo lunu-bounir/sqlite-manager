@@ -5,7 +5,7 @@ api.notify.clean();
 
 api.box.add();
 
-api.on('db.file', async(file, name = 'unknown db') => {
+api.on('db.file', async (file, name = 'unknown db') => {
   try {
     const id = await api.sql.open(file);
     api.tools.add(file ? file.name : name, id);
@@ -16,7 +16,7 @@ api.on('db.file', async(file, name = 'unknown db') => {
 });
 api.on('csv.file', file => {
   const reader = new FileReader();
-  reader.onload = async() => {
+  reader.onload = async () => {
     const [columns, ...values] = api.format.csv.toArray(reader.result);
     // find the table name
     let table = 'my_table';
@@ -44,7 +44,7 @@ var print = (msg, div, type = 'note') => {
   div.appendChild(pre);
 };
 
-api.on('execute.sql', async({query, result}) => {
+api.on('execute.sql', async ({query, result, target}) => {
   if (query) {
     const pipes = [];
     // extract all pipes
@@ -67,7 +67,7 @@ api.on('execute.sql', async({query, result}) => {
         const ast = query.length < 1000 ? api.sql.parse.exec(query) : {};
         result.ast = ast;
         const r = await api.sql.exec(id, query) || [];
-        r.forEach(async(o, i) => {
+        r.forEach(async (o, i) => {
           if (pipes[i]) {
             await api.compute.init();
             print(api.compute.import(pipes[i], o), result, 'sql');
@@ -82,10 +82,13 @@ api.on('execute.sql', async({query, result}) => {
         delete result.dataset.mode;
       }
       catch (e) {
-        console.error(e);
         print(e.message, result, 'error');
         delete result.dataset.mode;
       }
+      target.scrollIntoView({
+        block: 'start',
+        inline: 'nearest'
+      });
     }
   }
   else {
@@ -93,7 +96,7 @@ api.on('execute.sql', async({query, result}) => {
   }
 });
 
-api.on('execute.math', async({query, result}) => {
+api.on('execute.math', async ({query, result}) => {
   try {
     await api.compute.init();
     let r = await api.compute.exec(query);

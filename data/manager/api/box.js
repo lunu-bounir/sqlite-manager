@@ -64,7 +64,11 @@ box.add = () => {
     const scrollTop = viewer.scrollTop;
     input.style.height = '20px';
     input.style.height = input.scrollHeight + 'px';
-    input.scrollIntoViewIfNeeded();
+    input.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest'
+    });
     // keep the scroll top position; test with very long content
     viewer.scrollTop = scrollTop;
   };
@@ -107,7 +111,8 @@ box.add = () => {
 
       api.emit(isSQL(input.value) ? 'execute.sql' : 'execute.math', {
         query: input.value,
-        result
+        result,
+        target: e.target
       });
     }
   });
@@ -139,6 +144,7 @@ box.table = (index, sql, {columns, values}, parent) => {
   table.appendChild(tbody);
   parent.appendChild(table);
 
+  const fragment = document.createDocumentFragment();
   const add = (row, i) => {
     if (row) {
       const tr = document.createElement('tr');
@@ -146,10 +152,10 @@ box.table = (index, sql, {columns, values}, parent) => {
       [i + 1, ...row].forEach((name, i) => {
         const td = document.createElement('td');
         td.index = i;
-        td.textContent = name;
+        td.value = td.textContent = name;
         tr.appendChild(td);
       });
-      tbody.appendChild(tr);
+      fragment.appendChild(tr);
     }
   };
   if (values.length > 500) {
@@ -166,6 +172,8 @@ Press "Cancel" to abort the command execution.`;
   else {
     values.forEach(add);
   }
+  tbody.appendChild(fragment);
+
   const tools = new api.Table(table, columns, values);
   tools.add();
 };
@@ -179,34 +187,5 @@ box.clean = () => {
 box.last = () => {
   return document.querySelector('[data-id=command-box]:last-child textarea');
 };
-
-// https://gist.githubusercontent.com/hsablonniere/2581101/raw/3634e38ed9393bf0ae987ce9318f11eefca12020/index.js
-if (!Element.prototype.scrollIntoViewIfNeeded) {
-  Element.prototype.scrollIntoViewIfNeeded = function (centerIfNeeded) {
-    centerIfNeeded = arguments.length === 0 ? true : !!centerIfNeeded;
-
-    var parent = this.parentNode,
-        parentComputedStyle = window.getComputedStyle(parent, null),
-        parentBorderTopWidth = parseInt(parentComputedStyle.getPropertyValue('border-top-width')),
-        parentBorderLeftWidth = parseInt(parentComputedStyle.getPropertyValue('border-left-width')),
-        overTop = this.offsetTop - parent.offsetTop < parent.scrollTop,
-        overBottom = (this.offsetTop - parent.offsetTop + this.clientHeight - parentBorderTopWidth) > (parent.scrollTop + parent.clientHeight),
-        overLeft = this.offsetLeft - parent.offsetLeft < parent.scrollLeft,
-        overRight = (this.offsetLeft - parent.offsetLeft + this.clientWidth - parentBorderLeftWidth) > (parent.scrollLeft + parent.clientWidth),
-        alignWithTop = overTop && !overBottom;
-
-    if ((overTop || overBottom) && centerIfNeeded) {
-      parent.scrollTop = this.offsetTop - parent.offsetTop - parent.clientHeight / 2 - parentBorderTopWidth + this.clientHeight / 2;
-    }
-
-    if ((overLeft || overRight) && centerIfNeeded) {
-      parent.scrollLeft = this.offsetLeft - parent.offsetLeft - parent.clientWidth / 2 - parentBorderLeftWidth + this.clientWidth / 2;
-    }
-
-    if ((overTop || overBottom || overLeft || overRight) && !centerIfNeeded) {
-      this.scrollIntoView(alignWithTop);
-    }
-  };
-}
 
 export default box;

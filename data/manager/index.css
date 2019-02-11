@@ -3,8 +3,8 @@ html {
 }
 body {
   font-size: 12px;
-  height: calc(100% - 20px);
-  margin: 10px;
+  height: 100%;
+  margin: 0;
 }
 body,
 pre {
@@ -125,7 +125,8 @@ input[type=file] {
 }
 
 #tools {
-  margin-bottom: 10px;
+  margin: 10px;
+  white-space: nowrap;
 }
 #viewer {
   overflow-x: hidden;
@@ -134,7 +135,7 @@ input[type=file] {
 
 #box div[data-id="command-box"] {
   position: relative;
-  margin-top: 5px;
+  margin: 10px;
 }
 #box div[data-id="command-box"]>span {
   position: absolute;
