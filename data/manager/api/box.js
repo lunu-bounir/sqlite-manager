@@ -63,6 +63,28 @@ box.add = () => {
   div.dataset.index = '#' + index;
   const result = clone.querySelector('[data-id=result]');
   const input = clone.querySelector('textarea');
+  if (index === 1) {
+    input.placeholder = `Welcome to SQLite Manager
+
+Use the "File" menu to open or create a new SQLite database or simply drop a database into this window. You can work on several databases. To select the active database use the selector tool.
+
+You can run one or more SQLite or Math.js commands in each computational box. To execute the command press the "Enter" key. To move to the next line without executing the command use "Shift" + "Enter" key combination.
+
+-> Use help("command name") to get more info about each Math.js command (e.g.: help("selected")). This function is not usable for SQLite commands at the moment.
+
+-> Supported commands: This extension supports most of the SQLite CLI commands and  all of the Math.js commands
+
+-> Extra commands:
+    plot: plot one or more arrays. See the Chart.js menu for examples
+    selected: export selected row from the previous SQLite table to the Math.js sandbox
+    results: export a row from the previous SQLite table to the Math.js sandbox
+    db_new: Create a new database on the browser memory
+    db_load: Load a database from a server
+    db_download: Download the active database to the browser's default download directory
+    db_remove: Remove the active database from the browser memory
+
+`;
+  }
 
   // RESIZE
   const resize = () => {

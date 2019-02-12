@@ -22,7 +22,7 @@ tools.name = () => {
   return 'unknown';
 };
 
-document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', ({target}) => {
+document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', async ({target}) => {
   const value = target.dataset.value;
   if (value) {
     const msg = value
@@ -57,6 +57,21 @@ document.querySelector('#tools [data-id=commands]').addEventListener('mousedown'
   }
   else if (cmd === 'query.file -> click') {
     document.querySelector('input[type=file]').click();
+  }
+  else if (cmd === 'faqs') {
+    chrome.tabs.create({
+      url: chrome.runtime.getManifest().homepage_url
+    });
+  }
+  else if (cmd === 'sqlite -> help') {
+    chrome.tabs.create({
+      url: 'https://www.sqlite.org/docsrc/doc/trunk/art/syntax/all-bnf.html'
+    });
+  }
+  else if (cmd === 'math.js -> help') {
+    chrome.tabs.create({
+      url: 'http://mathjs.org/docs/reference/functions.html'
+    });
   }
 });
 

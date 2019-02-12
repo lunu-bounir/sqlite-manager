@@ -66,6 +66,16 @@ compute.init = () => {
           'db_remove("index of the database")'
         ]
       };
+      math.expression.docs.plot = {
+        category: 'Plot',
+        description: 'Plot one or more arrays. See the Chart.js menu for examples',
+        examples: [],
+        name: 'plot',
+        seealso: [],
+        syntax: [
+          'plot(array)'
+        ]
+      };
       math.import({
         'plot': (ax, ay, query) => {
           ax = math.squeeze(ax);
