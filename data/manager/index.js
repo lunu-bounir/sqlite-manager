@@ -8,7 +8,7 @@ api.box.add();
 api.on('db.file', async (file, name = 'unknown db') => {
   try {
     const id = await api.sql.open(file);
-    api.tools.add(file ? file.name : name, id);
+    api.tools.add(file && file.name ? file.name : name, id);
   }
   catch (e) {
     console.error(e);

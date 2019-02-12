@@ -63,7 +63,7 @@ chart.plot = (arrs, result) => {
             }
           }
         }
-        let linear = ['line', 'scatter'].indexOf(props.type) !== -1 || props.type === '';
+        const linear = ['line', 'scatter'].indexOf(props.type) !== -1 || props.type === '';
 
         let backgroundColor = props.backgroundColor || colors[i] + '33';
         if (!linear && !props.backgroundColor) {

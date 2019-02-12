@@ -36,6 +36,16 @@ compute.init = () => {
           'db_new("name of the database")'
         ]
       };
+      math.expression.docs.db_load = {
+        category: 'SQLite',
+        description: 'Fetch a database from a URL and open it',
+        examples: [],
+        name: 'db_load',
+        seealso: [],
+        syntax: [
+          'db_load("http://...", "database name")'
+        ]
+      };
       math.expression.docs.db_download = {
         category: 'SQLite',
         description: 'Download a database from memory to local disk. The downloaded database will be placed in the default download directory of your browser',
@@ -69,12 +79,12 @@ compute.init = () => {
           }
           if (ax && !ay) {
             ay = ax;
-            ax = math.eval(`0:${ay._data.length - 1}`);
+            ax = math.eval(`0:${ay._data ? ay._data.length - 1 : ay.length}`);
           }
           return {
             type: 'plot',
-            x: ax._data,
-            y: ay._data,
+            x: ax._data || ax,
+            y: ay._data || ay,
             query
           };
         },
@@ -94,6 +104,21 @@ compute.init = () => {
           api.sql.export(id, api.tools.name());
 
           return 'The database is being downloaded to the default download directory of your browser';
+        },
+        'db_load': (path, name) => {
+          chrome.permissions.request({
+            origins: [path]
+          }, granted => {
+            // The callback argument will be true if the user granted the permissions.
+            if (granted) {
+              fetch(path).then(r => r.blob()).then(blob => {
+                api.emit('db.file', blob, name);
+                api.notify('Database is ready');
+              }).catch(e => api.notify(e.message));
+            }
+          });
+
+          return 'Please wait until database is loaded';
         },
         'selected': id => {
           const index = scope._index;

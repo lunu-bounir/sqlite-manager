@@ -19,6 +19,10 @@
     "storage"
   ],
 
+  "optional_permissions": [
+    "*://*/*"
+  ],
+
   "browser_action": {
     "default_icon": {
       "16": "data/icons/16.png",
