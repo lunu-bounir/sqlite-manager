@@ -1,5 +1,5 @@
 math.js
-https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.2.3/math.min.js
+https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.4.2/math.min.js
 sql.js
 https://github.com/kripken/sql.js/tree/master/js
 Chart.js
