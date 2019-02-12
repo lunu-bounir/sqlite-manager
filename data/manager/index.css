@@ -137,6 +137,17 @@ input[type=file] {
   position: relative;
   margin: 10px;
 }
+#box div[data-id="command-box"]::after {
+  content: attr(data-index);
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  background-color: #75756c;
+  color: #fff;
+  padding: 0 2px;
+  font-size: 9px;
+  font-weight: 200;
+}
 #box div[data-id="command-box"]>span {
   position: absolute;
   display: inline-block;

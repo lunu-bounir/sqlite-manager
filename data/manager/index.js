@@ -44,7 +44,8 @@ var print = (msg, div, type = 'note') => {
   div.appendChild(pre);
 };
 
-api.on('execute.sql', async ({query, result, target}) => {
+api.on('execute.sql', async ({query, result, target, index}) => {
+  console.log(index);
   if (query) {
     const pipes = [];
     // extract all pipes
@@ -96,10 +97,10 @@ api.on('execute.sql', async ({query, result, target}) => {
   }
 });
 
-api.on('execute.math', async ({query, result}) => {
+api.on('execute.math', async ({query, result, index}) => {
   try {
     await api.compute.init();
-    let r = await api.compute.exec(query);
+    let r = await api.compute.exec(query, index);
     r = r.entries ? r : {
       entries: [r]
     };

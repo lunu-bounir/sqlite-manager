@@ -1,6 +1,8 @@
 /* globals api */
 const box = {
-  active: null
+  active: null,
+  selected: [],
+  boxes: []
 };
 
 const root = document.getElementById('box');
@@ -56,6 +58,9 @@ box.add = () => {
   const t = document.getElementById('command-box');
   const clone = document.importNode(t.content, true);
   const div = clone.querySelector('[data-id="command-box"]');
+  const index = box.boxes.push(div);
+  div.index = index - 1;
+  div.dataset.index = '#' + index;
   const result = clone.querySelector('[data-id=result]');
   const input = clone.querySelector('textarea');
 
@@ -109,10 +114,13 @@ box.add = () => {
       result.textContent = '';
       delete result.dataset.type;
 
+      const index = e.target.closest('[data-id="command-box"]').index;
+
       api.emit(isSQL(input.value) ? 'execute.sql' : 'execute.math', {
         query: input.value,
         result,
-        target: e.target
+        target: e.target,
+        index
       });
     }
   });
@@ -186,6 +194,19 @@ box.clean = () => {
 
 box.last = () => {
   return document.querySelector('[data-id=command-box]:last-child textarea');
+};
+
+box.get = index => {
+  return box.boxes[index];
+};
+
+box.trs = index => {
+  return [...box.boxes[index].querySelectorAll('tbody tr')];
+};
+
+box.selected = index => {
+  const div = box.get(index);
+  return [...div.querySelectorAll('[data-selected="true"]')];
 };
 
 export default box;
