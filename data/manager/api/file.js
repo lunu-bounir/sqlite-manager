@@ -3,10 +3,13 @@
   const body = document.body;
 
   const process = files => {
-    files.filter(f => f.name.toLowerCase().endsWith('.csv') === false)
+    console.log(files);
+    files.filter(f => f.type !== 'text/csv' && f.type !== 'application/json')
       .forEach(file => api.emit('db.file', file));
-    files.filter(f => f.name.toLowerCase().endsWith('.csv') === true)
+    files.filter(f => f.type === 'text/csv')
       .forEach(file => api.emit('csv.file', file));
+    files.filter(f => f.type === 'application/json')
+      .forEach(file => api.emit('json.file', file));
   };
 
   body.addEventListener('dragenter', e => e.target.classList && e.target.classList.add('over'), false);

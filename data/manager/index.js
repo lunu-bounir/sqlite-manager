@@ -36,6 +36,21 @@ api.on('csv.file', file => {
 
   reader.readAsText(file, 'utf-8');
 });
+api.on('json.file', file => {
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try {
+      const json = JSON.parse(reader.result);
+      api.compute.last(json);
+      api.notify('"last" variable contains ' + file.name);
+    }
+    catch (e) {
+      api.notify(e.message);
+    }
+  };
+
+  reader.readAsText(file, 'utf-8');
+});
 
 var print = (msg, div, type = 'note') => {
   const pre = document.createElement('pre');
@@ -71,6 +86,7 @@ api.on('execute.sql', async ({query, parameters, result, target}) => {
           (await api.sql.pexec(id, query, parameters)) :
           (await api.sql.exec(id, query))
         ) || [];
+        console.log(r);
         r.forEach(async (o, i) => {
           if (pipes[i]) {
             await api.compute.init();

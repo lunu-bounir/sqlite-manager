@@ -154,6 +154,12 @@ You can run one or more SQLite or Math.js commands in each computational box. To
 };
 
 box.table = (index, sql, {columns, values}, parent) => {
+  if (values.length === 0) {
+    const pre = document.createElement('pre');
+    pre.textContent = 'Empty Result';
+    pre.dataset.type = 'warning';
+    return parent.appendChild(pre);
+  }
   const table = document.createElement('table');
   table.sql = sql;
   table.columns = columns;

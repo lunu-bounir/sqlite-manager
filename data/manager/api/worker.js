@@ -25,14 +25,27 @@ self.onmessage = ({data}) => {
     }
     else if (data.action === 'parametric-exec') {
       const stmt = dbs[data.id].prepare(data.sql);
-      stmt.bind(data.parameters);
-      data.results = [{
-        columns: stmt.getColumnNames(),
-        values: []
-      }];
-      while (stmt.step()) {
-        data.results[0].values.push(stmt.get());
+      data.results = [];
+      if (data.parameters._data) {
+        data.parameters = data.parameters._data;
       }
+      else {
+        data.parameters = [data.parameters];
+      }
+      for (const o of data.parameters) {
+        stmt.bind(o);
+        const r = {
+          columns: stmt.getColumnNames(),
+          values: []
+        };
+        while (stmt.step()) {
+          r.values.push(stmt.get());
+        }
+        if (r.values.length) {
+          data.results.push(r);
+        }
+      }
+
       delete data.sql;
       delete data.object;
     }

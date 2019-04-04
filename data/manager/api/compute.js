@@ -225,7 +225,7 @@ compute.exec = (exp, result, index, target) => {
   let r = math.eval(exp, scope);
   const defered = [];
   // async
-  if (r && r.entries) {
+  if (r && r.entries && Array.isArray(r.entries)) {
     r.entries.forEach((entry, i) => {
       if (entry && entry.type === 'async') {
         defered.push(entry);
@@ -248,5 +248,7 @@ compute.exec = (exp, result, index, target) => {
 
   return r && r.type ? r : math.format(r);
 };
+
+compute.last = o => scope.last = o;
 
 export default compute;
