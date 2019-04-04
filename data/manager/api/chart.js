@@ -4,6 +4,7 @@ const colors = ['#69d2e7', '#fe4365', '#ecd078', '#556270', '#774f38', '#e8ddcb'
 
 chart.init = () => {
   if (typeof Chart === 'undefined') {
+    api.require('vendor/moment.min.js');
     return api.require('vendor/Chart.min.js').then(() => api.emit('chart.init'));
   }
   return Promise.resolve();
@@ -98,9 +99,33 @@ chart.plot = (arrs, result) => {
       scales: {
         xAxes: arrs.filter(({query = ''}, i) => i === 0 || query.indexOf('axis=true') !== -1)
           .map(({query = ''}) => {
+            const props = Object.assign({}, defaults);
+            for (const [key, value] of (new URLSearchParams(query)).entries()) {
+              if (value === 'true') {
+                props[key] = true;
+              }
+              else if (value === 'false') {
+                props[key] = false;
+              }
+              else if (isNaN(value)) {
+                if (/^\[.*\]$/.test(value)) {
+                  props[key] = value.substr(1, value.length - 2).split(/\s*,\s*/);
+                }
+                else {
+                  props[key] = value;
+                }
+              }
+              else {
+                props[key] = Number(value);
+              }
+            }
             const axis = {};
-            if (query.indexOf('line') !== -1 || query.indexOf('scatter') !== -1 || query.indexOf('type=') == -1) {
+            if ((query.indexOf('line') !== -1 || query.indexOf('scatter') !== -1 || query.indexOf('type=') == -1) && (query.indexOf('parser') == -1)) {
               axis.type = 'linear';
+            }
+            if (query.indexOf('parser') !== -1) {
+              axis.type = 'time';
+              axis.time = {parser : props.parser}
             }
             return axis;
           })

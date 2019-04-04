@@ -172,6 +172,8 @@ size(c)'>Size and Dimensions<span>size</span></li>
           <ul>
             <li data-value='plot(sin(1:10))
 plot(sin(1:10), "steppedLine=after&backgroundColor=transparent&borderColor=gray&borderWidth=2&label=Step Function")'>Line chart<span>plot</span></li>
+            <li data-value='#time formats supported by parse are as defined in https://momentjs.com/docs/#/parsing/
+plot(["2018-10-01T01:00:00Z","2018-10-01T01:10:00Z","2018-10-02T01:30:00Z","2018-11-01T01:50:00Z"], [1,2,3,4], "type=line&parser=YYYY-MM-DD[T]HH:mm:ss[Z]")'>Time chart<span>plot</span></li>
             <li data-value='plot(1:10, sin(1:10), "type=scatter&showLine=false&borderColor=red&borderWidth=5")'>Scatter chart<span>plot</span></li>
             <li data-value='plot(["group a", "group b", "group c"], [100, 50, 0], "type=bar")
 plot([10, 20, 30], "type=bar")
