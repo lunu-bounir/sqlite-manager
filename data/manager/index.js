@@ -86,7 +86,6 @@ api.on('execute.sql', async ({query, parameters, result, target}) => {
           (await api.sql.pexec(id, query, parameters)) :
           (await api.sql.exec(id, query))
         ) || [];
-        console.log(r);
         r.forEach(async (o, i) => {
           if (pipes[i]) {
             await api.compute.init();

@@ -3,7 +3,6 @@
   const body = document.body;
 
   const process = files => {
-    console.log(files);
     files.filter(f => f.type !== 'text/csv' && f.type !== 'application/json')
       .forEach(file => api.emit('db.file', file));
     files.filter(f => f.type === 'text/csv')
