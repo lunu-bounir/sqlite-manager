@@ -81,9 +81,7 @@ You can run one or more SQLite or Math.js commands in each computational box. To
     db_new: Create a new database on the browser memory
     db_load: Load a database from a server
     db_download: Download the active database to the browser's default download directory
-    db_remove: Remove the active database from the browser memory
-
-`;
+    db_remove: Remove the active database from the browser memory`;
   }
   input.style.height = '380px';
 

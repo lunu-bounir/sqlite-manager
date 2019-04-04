@@ -44,8 +44,7 @@ var print = (msg, div, type = 'note') => {
   div.appendChild(pre);
 };
 
-api.on('execute.sql', async ({query, result, target, index}) => {
-  console.log(index);
+api.on('execute.sql', async ({query, parameters, result, target}) => {
   if (query) {
     const pipes = [];
     // extract all pipes
@@ -67,7 +66,11 @@ api.on('execute.sql', async ({query, result, target, index}) => {
       try {
         const ast = query.length < 1000 ? api.sql.parse.exec(query) : {};
         result.ast = ast;
-        const r = await api.sql.exec(id, query) || [];
+
+        const r = (typeof parameters !== 'undefined' ?
+          (await api.sql.pexec(id, query, parameters)) :
+          (await api.sql.exec(id, query))
+        ) || [];
         r.forEach(async (o, i) => {
           if (pipes[i]) {
             await api.compute.init();
@@ -97,21 +100,26 @@ api.on('execute.sql', async ({query, result, target, index}) => {
   }
 });
 
-api.on('execute.math', async ({query, result, index}) => {
+api.on('execute.math', async ({query, result, index, target}) => {
   try {
     await api.compute.init();
-    let r = await api.compute.exec(query, index);
+    let r = await api.compute.exec(query, result, index, target);
     r = r.entries ? r : {
       entries: [r]
     };
-    const plts = r.entries.filter(o => o.type === 'plot');
+    const plts = r.entries.filter(o => o && o.type === 'plot');
     if (plts.length) {
       await api.chart.init();
       api.chart.plot(plts, result);
     }
-    const rlts = r.entries.filter(o => o.type !== 'plot');
-    if (rlts.length) {
-      print(rlts.join('\n'), result);
+    const rlts = r.entries.filter(o => !o || o.type !== 'plot');
+    for (const rlt of rlts) {
+      if (rlt) {
+        print(rlt, result);
+      }
+      else {
+        print('no output', result, 'warning');
+      }
     }
   }
   catch (e) {

@@ -23,6 +23,19 @@ self.onmessage = ({data}) => {
       data.results = dbs[data.id].exec(data.sql);
       delete data.sql;
     }
+    else if (data.action === 'parametric-exec') {
+      const stmt = dbs[data.id].prepare(data.sql);
+      stmt.bind(data.parameters);
+      data.results = [{
+        columns: stmt.getColumnNames(),
+        values: []
+      }];
+      while (stmt.step()) {
+        data.results[0].values.push(stmt.get());
+      }
+      delete data.sql;
+      delete data.object;
+    }
     else if (data.action === 'export') {
       data.buffer = dbs[data.id].export();
     }

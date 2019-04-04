@@ -133,6 +133,8 @@ multiply(array, matrix)
 
 ones(2, 3)'>Arrays and matrices<span>matrix</span></li>
             <li data-value="map(1:10, f(x) = x + 2)">Use functions<span>map</span></li>
+            <li data-value="sql('SELECT * from table_name WHERE column=value')">Use SQL function<span>sql</span></li>
+            <li data-value="sql('SELECT * from table_name WHERE column=:v', {':v': 'test'})">Use SQL function (parametric)<span>sql</span></li>
             <li data-value='zeros(3)
 zeros(3, 2)
 zeros(3, "dense")

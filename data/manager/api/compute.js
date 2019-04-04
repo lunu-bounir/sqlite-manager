@@ -76,7 +76,24 @@ compute.init = () => {
           'plot(array)'
         ]
       };
+      math.expression.docs.sql = {
+        category: 'SQL',
+        description: 'Run a single SQLite command from math.js environment. This allows user to write arrays to the active database',
+        examples: [],
+        name: 'sql',
+        seealso: [],
+        syntax: [
+          'sql(\'SELECT * from table_name WHERE column=value\')',
+          'sql(\'SELECT * from table_name WHERE column=:v\', {\':v\': \'test\'})'
+        ]
+      };
+
       math.import({
+        'sql': (command, parameters) => ({
+          type: 'async',
+          command,
+          parameters
+        }),
         'plot': (ax, ay, query) => {
           ax = math.squeeze(ax);
           if (typeof ay === 'string') {
@@ -203,10 +220,33 @@ compute.import = (name, aa) => compute.exec(`${name.trim()} = squeeze(${JSON.str
   aa.values
 )})`);
 
-compute.exec = (exp, index) => {
+compute.exec = (exp, result, index, target) => {
   scope._index = index;
-  const r = math.eval(exp, scope);
-  return r.type ? r : math.format(r);
+  let r = math.eval(exp, scope);
+  const defered = [];
+  // async
+  if (r && r.entries) {
+    r.entries.forEach((entry, i) => {
+      if (entry && entry.type === 'async') {
+        defered.push(entry);
+        r.entries.splice(i, 1, 'SQLite evaluation queued. Results will be reported');
+      }
+    });
+  }
+  else if (r && r.type === 'async') {
+    defered.push(r);
+    r = 'SQLite evaluation queued. Results will be reported';
+  }
+  for (const d of defered) {
+    api.emit('execute.sql', {
+      query: d.command,
+      parameters: d.parameters,
+      result,
+      target
+    });
+  }
+
+  return r && r.type ? r : math.format(r);
 };
 
 export default compute;

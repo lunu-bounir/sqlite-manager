@@ -24,7 +24,7 @@ let index = 0;
       window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
       tmp[data.tId].resolve();
     }
-    else if (data.action === 'exec') {
+    else if (data.action === 'exec' || data.action === 'parametric-exec') {
       tmp[data.tId].resolve(data.results);
     }
   };
@@ -83,6 +83,12 @@ let index = 0;
   sql.exec = (id = 0, sql) => post(id, {
     action: 'exec',
     sql
+  });
+
+  sql.pexec = (id = 0, sql, parameters) => post(id, {
+    action: 'parametric-exec',
+    sql,
+    parameters
   });
 
   sql.close = (id = 0) => post(id, {

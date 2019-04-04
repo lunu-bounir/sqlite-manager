@@ -176,7 +176,7 @@ input[type=file] {
   background-image: url(loading.gif);
   background-repeat: no-repeat;
   background-position: right center;
-  height: 22px;
+  min-height: 22px;
 }
 #box div[data-id=result] {
   overflow-x: auto;
