@@ -85,6 +85,7 @@ You can run one or more SQLite or Math.js commands in each computational box. To
 
 `;
   }
+  input.style.height = '380px';
 
   // RESIZE
   const resize = () => {

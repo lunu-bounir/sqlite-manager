@@ -4,8 +4,10 @@ const colors = ['#69d2e7', '#fe4365', '#ecd078', '#556270', '#774f38', '#e8ddcb'
 
 chart.init = () => {
   if (typeof Chart === 'undefined') {
-    api.require('vendor/moment.min.js');
-    return api.require('vendor/Chart.min.js').then(() => api.emit('chart.init'));
+    return Promise.all([
+      api.require('vendor/Chart.min.js'),
+      api.require('vendor/moment.min.js')
+    ]).then(() => api.emit('chart.init'));
   }
   return Promise.resolve();
 };

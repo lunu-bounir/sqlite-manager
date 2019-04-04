@@ -27,7 +27,7 @@ self.onmessage = ({data}) => {
       data.buffer = dbs[data.id].export();
     }
   }
-  catch(e) {
+  catch (e) {
     data.error = e.message;
   }
 
