@@ -113,4 +113,45 @@ sql.parse = {
   exec: query => sqliteParser(query)
 };
 
+sql.run = async (query, parameters) => {
+  const pipes = [];
+  // extract all pipes
+  query = query.split(';').filter(q => q).map(query => query.trim()).map((query, i) => {
+    const [sql, pipe] = query.split(/\s* \| import as \s*/);
+    if (pipe) {
+      pipes[i] = pipe;
+    }
+    return sql;
+  }).join('; ');
+
+  const id = api.tools.id();
+  if (isNaN(id)) {
+    throw Error('Load a SQLite database or create a new one before executing SQLite commands');
+  }
+  await sql.parse.init();
+
+  const r = (typeof parameters !== 'undefined' ?
+    (await sql.pexec(id, query, parameters)) :
+    (await sql.exec(id, query))
+  ) || [];
+
+  if (pipes.length) {
+    await api.compute.init();
+  }
+  return r.map((o, index) => {
+    if (pipes[index]) {
+      return api.compute.import(pipes[index], o);
+    }
+    else {
+      return {
+        type: 'table',
+        index,
+        sql,
+        o,
+        ast: query.length < 1000 ? api.sql.parse.exec(query) : {}
+      };
+    }
+  });
+};
+
 export default sql;

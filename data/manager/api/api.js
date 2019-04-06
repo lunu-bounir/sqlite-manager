@@ -9,6 +9,7 @@ import history from './history.js';
 import format from './format.js';
 import './file.js';
 import Table from './table.js';
+import sandbox from './sandbox.js';
 
 var api = new EventEmitter();
 window.api = api;
@@ -47,5 +48,6 @@ api.tools = tools;
 api.history = history;
 api.format = format;
 api.Table = Table;
+api.sandbox = sandbox;
 
 api.require('./index.js');

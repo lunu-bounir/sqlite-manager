@@ -29,10 +29,11 @@ self.onmessage = ({data}) => {
       if (data.parameters._data) {
         data.parameters = data.parameters._data;
       }
-      else {
+      else if (Array.isArray(data.parameters) === false) {
         data.parameters = [data.parameters];
       }
-      for (const o of data.parameters) {
+      data.parameters.forEach((o, i) => {
+        console.log('Computing', i, o.length);
         stmt.bind(o);
         const r = {
           columns: stmt.getColumnNames(),
@@ -44,7 +45,7 @@ self.onmessage = ({data}) => {
         if (r.values.length) {
           data.results.push(r);
         }
-      }
+      });
 
       delete data.sql;
       delete data.object;

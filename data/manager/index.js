@@ -41,7 +41,7 @@ api.on('json.file', file => {
   reader.onload = async () => {
     try {
       const json = JSON.parse(reader.result);
-      api.compute.last(json);
+      api.compute.set('last', json);
       api.notify('"last" variable contains ' + file.name);
     }
     catch (e) {
@@ -52,66 +52,31 @@ api.on('json.file', file => {
   reader.readAsText(file, 'utf-8');
 });
 
-var print = (msg, div, type = 'note') => {
-  const pre = document.createElement('pre');
-  pre.textContent = msg;
-  pre.dataset.type = type;
-  div.appendChild(pre);
-};
-
 api.on('execute.sql', async ({query, parameters, result, target}) => {
   if (query) {
-    const pipes = [];
-    // extract all pipes
-    query = query.split(';').filter(q => q).map(query => query.trim()).map((query, i) => {
-      const [sql, pipe] = query.split(/\s* \| import as \s*/);
-      if (pipe) {
-        pipes[i] = pipe;
+    result.dataset.mode = 'busy';
+    await api.sql.parse.init();
+    try {
+      const rs = await api.sql.run(query, parameters);
+      for (const r of rs) {
+        api.box.print(r, result);
       }
-      return sql;
-    }).join('; ');
-
-    const id = api.tools.id();
-    if (isNaN(id)) {
-      print('Load a SQLite database or create a new one before executing SQLite commands', result, 'error');
+      if (rs.length === 0) {
+        api.box.print('', result);
+      }
+      delete result.dataset.mode;
     }
-    else {
-      result.dataset.mode = 'busy';
-      await api.sql.parse.init();
-      try {
-        const ast = query.length < 1000 ? api.sql.parse.exec(query) : {};
-        result.ast = ast;
-
-        const r = (typeof parameters !== 'undefined' ?
-          (await api.sql.pexec(id, query, parameters)) :
-          (await api.sql.exec(id, query))
-        ) || [];
-        r.forEach(async (o, i) => {
-          if (pipes[i]) {
-            await api.compute.init();
-            print(api.compute.import(pipes[i], o), result, 'sql');
-          }
-          else {
-            api.box.table(i, query, o, result);
-          }
-        });
-        if (r.length === 0) {
-          print('no output', result, 'warning');
-        }
-        delete result.dataset.mode;
-      }
-      catch (e) {
-        print(e.message, result, 'error');
-        delete result.dataset.mode;
-      }
-      target.scrollIntoView({
-        block: 'start',
-        inline: 'nearest'
-      });
+    catch (e) {
+      api.box.print(e, result);
+      delete result.dataset.mode;
     }
+    target.scrollIntoView({
+      block: 'start',
+      inline: 'nearest'
+    });
   }
   else {
-    print('Empty command', result, 'warning');
+    api.box.print('Empty command', result, 'warning');
   }
 });
 
@@ -119,26 +84,25 @@ api.on('execute.math', async ({query, result, index, target}) => {
   try {
     await api.compute.init();
     let r = await api.compute.exec(query, result, index, target);
-    r = r.entries ? r : {
+    r = r.entries && Array.isArray(r.entries) ? r : {
       entries: [r]
     };
+
     const plts = r.entries.filter(o => o && o.type === 'plot');
     if (plts.length) {
       await api.chart.init();
       api.chart.plot(plts, result);
     }
     const rlts = r.entries.filter(o => !o || o.type !== 'plot');
-    for (const rlt of rlts) {
-      if (rlt) {
-        print(rlt, result);
-      }
-      else {
-        print('no output', result, 'warning');
-      }
+    for (const answer of rlts) {
+      api.box.print({
+        type: 'mathjs',
+        answer
+      }, result);
     }
   }
   catch (e) {
     console.error(e);
-    print(e.message, result, 'error');
+    api.box.print(e.message, result, 'error');
   }
 });

@@ -1,8 +1,34 @@
-/* globals api */
+/* globals api, math */
 const box = {
   active: null,
   selected: [],
   boxes: []
+};
+
+// general editor shortcuts
+box.keydown = e => {
+  if (e.key === 'Enter' && e.shiftKey) {
+    const v = e.target.value.substr(0, e.target.selectionStart).split('\n').pop();
+    const s = v.match(/^(\s*)/)[0];
+    if (s) {
+      window.setTimeout(() => {
+        document.execCommand('insertText', null, s);
+      });
+    }
+  }
+  else if (e.key === 'Tab') {
+    e.preventDefault();
+    document.execCommand('insertText', null, '  ');
+  }
+  else if (e.key === 'd' && e.metaKey) {
+    if (e.target.selectionStart === e.target.selectionEnd) {
+      const v = e.target.value.substr(0, e.target.selectionStart).split(/\s/).pop();
+      if (v) {
+        e.target.selectionStart -= v.length;
+      }
+    }
+    e.preventDefault();
+  }
 };
 
 const root = document.getElementById('box');
@@ -66,9 +92,9 @@ box.add = () => {
   if (index === 1) {
     input.placeholder = `Welcome to SQLite Manager
 
-Use the "File" menu to open or create a new SQLite database or simply drop a database into this window. You can work on several databases. To select the active database use the selector tool.
+Use the "File" menu to open or create a new SQLite database or simply drop a database into this window. You can work on several databases. To select the active database use the selector tool in the top right side of the screen.
 
-You can run one or more SQLite or Math.js commands in each computational box. To execute the command press the "Enter" key. To move to the next line without executing the command use "Shift" + "Enter" key combination.
+You can run one or more SQLite or Math.js commands in each computational box. To execute the command press the "Enter" key. To move to the next line without executing the command use "Shift" + "Enter" key combination. Note that each computational box can either run SQLite or Math.js commands. You are not allowed to mix these two.
 
 -> Use help("command name") to get more info about each Math.js command (e.g.: help("selected")). This function is not usable for SQLite commands at the moment.
 
@@ -81,7 +107,9 @@ You can run one or more SQLite or Math.js commands in each computational box. To
     db_new: Create a new database on the browser memory
     db_load: Load a database from a server
     db_download: Download the active database to the browser's default download directory
-    db_remove: Remove the active database from the browser memory`;
+    db_remove: Remove the active database from the browser memory
+    js: Run JavaScript commands in a sandboxed window
+    sql: Run SQLite commands in the Math.js environment`;
   }
   input.style.height = '380px';
 
@@ -120,8 +148,7 @@ You can run one or more SQLite or Math.js commands in each computational box. To
         }
       }
     }
-  });
-  input.addEventListener('keypress', e => {
+
     // dealing with Enter
     if (e.key === 'Enter' && e.shiftKey === false && input.value.trim()) {
       e.preventDefault();
@@ -144,6 +171,7 @@ You can run one or more SQLite or Math.js commands in each computational box. To
         index
       });
     }
+    box.keydown(e);
   });
   input.addEventListener('focus', e => box.active = e.target);
   root.appendChild(clone);
@@ -234,6 +262,71 @@ box.trs = index => {
 box.selected = index => {
   const div = box.get(index);
   return [...div.querySelectorAll('[data-selected="true"]')];
+};
+
+box.print = (msg, div, type = 'note') => {
+  const pre = document.createElement('pre');
+
+  if (msg instanceof Error) {
+    type = 'error';
+    msg = msg.message;
+  }
+
+  if (msg && msg.type === 'mathjs') {
+    if (msg.answer.type === 'js' || msg.answer.type === 'async') {
+      msg = msg.answer;
+    }
+    else {
+      msg = math.format(msg.answer);
+    }
+  }
+  if (msg && msg.type === 'js') {
+    const {code, name} = msg;
+    msg = '...';
+    api.sandbox.init().then(() => {
+      api.sandbox.execute(code).then(r => {
+        if (name) {
+          api.compute.set(name, r);
+        }
+        if (typeof r === 'object') {
+          r = JSON.stringify(r, null, '  ');
+        }
+        pre.textContent = r || 'empty output';
+        if (!r) {
+          pre.dataset.type = 'warning';
+        }
+      }).catch(e => {
+        console.log(e);
+        pre.textContent = e.message;
+        pre.dataset.type = 'error';
+      });
+    });
+  }
+  else if (msg && msg.type === 'async') {
+    const {command, parameters} = msg;
+    msg = '...';
+    api.sql.run(command, parameters).then(rs => {
+      for (const r of rs) {
+        box.print(r, div, type);
+      }
+      if (rs.length === 0) {
+        box.print('', div);
+      }
+    }).catch(e => box.print(e, div)).finally(() => pre.remove());
+  }
+  if (msg && msg.type === 'table') {
+    div.ast = msg.ast;
+    return box.table(msg.index, msg.sql, msg.o, div);
+  }
+
+  if (!msg) {
+    type = 'warning';
+    msg = 'empty output';
+  }
+  pre.textContent = msg;
+
+  pre.dataset.type = type;
+  div.appendChild(pre);
 };
 
 export default box;

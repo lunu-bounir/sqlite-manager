@@ -260,11 +260,13 @@ input[type=file] {
   background-color: #fff;
   padding: 2px;
   box-shadow: 1px 1px 2px 1px #e1dede;
+  background-color: #f5f5f5;
 }
 #editor textarea {
   width: 300px;
   border: none;
   padding: 5px;
+  outline: none;
 }
 #editor input {
   padding: 5px 10px;

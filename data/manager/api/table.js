@@ -1,6 +1,17 @@
 /* globals api */
 const editor = document.getElementById('editor');
 editor.input = editor.querySelector('textarea');
+editor.input.addEventListener('keydown', e => api.box.keydown(e));
+editor.open = (pos, mode = 'sql', placeholder = '') => {
+  editor.input.value = '';
+  editor.style.left = pos.left + 'px';
+  editor.style.top = pos.top + 'px';
+  editor.dataset.mode = mode;
+  editor.input.placeholder = placeholder;
+  editor.dataset.visible = true;
+  editor.input.focus();
+  editor.scrollIntoView();
+};
 editor.close = (e, stop = true) => {
   editor.dataset.visible = false;
   try {
@@ -16,7 +27,7 @@ editor.addEventListener('click', e => {
   if (cmd === 'close') {
     editor.close(e);
   }
-  else if (cmd === 'execute') {
+  else if (cmd === 'execute' && editor.dataset.mode === 'sql') {
     const id = api.tools.id();
     const query = editor.input.value;
     const error = e => {
@@ -55,10 +66,16 @@ editor.addEventListener('click', e => {
       }
     }).catch(error);
   }
+  else if (cmd === 'execute' && editor.dataset.mode === 'js') {
+    api.sandbox.init().then(() => {
+      api.sandbox.execute(editor.input.value)
+        .then(r => r && console.log(r), e => console.error(e));
+    });
+  }
 });
 // hide editor on click
 document.addEventListener('click', e => {
-  if (!e.target.closest('#editor')) {
+  if (!e.target.closest('#editor') && editor.dataset.mode === 'sql') {
     editor.close(e, false);
   }
 });
@@ -74,9 +91,6 @@ const Table = function(root, columns, values) {
       const tr = td.closest('tr');
 
       const rect = td.getBoundingClientRect();
-      const offset = rect.left + 380 - document.documentElement.clientWidth;
-      editor.style.left = rect.left + (offset > 0 ? -offset : 0) + 'px';
-      editor.style.top = rect.top + 'px';
       editor.tr = tr;
       editor.columns = root.columns;
       try {
@@ -100,12 +114,14 @@ const Table = function(root, columns, values) {
         statement += api.format.sql.toValues([obj.id.value]);
 
         window.setTimeout(() => {
+          const offset = rect.left + 380 - document.documentElement.clientWidth;
+          editor.open({
+            left: rect.left + (offset > 0 ? -offset : 0),
+            top: rect.top
+          });
           editor.input.value = statement;
           editor.input.selectionStart = start;
           editor.input.selectionEnd = end;
-          editor.dataset.visible = true;
-          editor.input.focus();
-          editor.scrollIntoView();
           tr.dataset.editor = true;
           tr.dataset.selected = true;
         });
@@ -159,5 +175,8 @@ Table.prototype.parse = function(qIndex, row, column) {
     }
   };
 };
+
+Table.editor = {};
+Table.editor.open = editor.open;
 
 export default Table;

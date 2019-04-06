@@ -39,6 +39,8 @@
 PRAGMA page_count;
 PRAGMA page_size;">Database info<span>PRAGMA</span></li>
             <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
+            <li class="separator"></li>
+            <li data-cmd="open.js.editor">Open JavaScript editor</li>
           </ul>
         </div>
         <div class="list">
@@ -213,7 +215,7 @@ plot([30, 30, 30], "type=doughnut")'>Doughnut chart<span>plot</span></li>
     </div>
 
     <div id="editor" data-visible=false hbox align=end>
-      <textarea rows="6"></textarea>
+      <textarea rows="6" spellcheck="false"></textarea>
       <div vbox>
         <input type="button" value="Close" data-cmd="close"/>
         <input type="button" value="Execute" data-cmd="execute"/>

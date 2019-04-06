@@ -63,6 +63,12 @@ document.querySelector('#tools [data-id=commands]').addEventListener('mousedown'
       url: chrome.runtime.getManifest().homepage_url
     });
   }
+  else if (cmd === 'open.js.editor') {
+    window.setTimeout(() => api.Table.editor.open({
+      top: 10,
+      left: 10
+    }, 'js', `Run JavaScript commands in a sandboxed window. To access the MathJS scope, use the 'mathjs' global variable. This way you can use MathJS variables in the JS environment. To export a variable to the MathJS scope, use send('variable-name', 'variable-value') command. To see the outputs, use your browser console.`));
+  }
   else if (cmd === 'sqlite -> help') {
     chrome.tabs.create({
       url: 'https://www.sqlite.org/docsrc/doc/trunk/art/syntax/all-bnf.html'

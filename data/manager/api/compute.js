@@ -78,17 +78,34 @@ compute.init = () => {
       };
       math.expression.docs.sql = {
         category: 'SQL',
-        description: 'Run a single SQLite command from math.js environment. This allows user to write arrays to the active database',
+        description: 'Run a single SQLite command from math.js environment. To execute this command multiple times with different inputs, provide an array of inputs as the second argument.',
         examples: [],
         name: 'sql',
         seealso: [],
         syntax: [
           'sql(\'SELECT * from table_name WHERE column=value\')',
-          'sql(\'SELECT * from table_name WHERE column=:v\', {\':v\': \'test\'})'
+          'sql(\'SELECT * from table_name WHERE column=:v\', {\':v\': \'test\'})',
+          'sql(\'SELECT * from table_name WHERE column=:v\', [{\':v\': \'test-1\'}, {\':v\': \'test-2\'}])'
+        ]
+      };
+      math.expression.docs.js = {
+        category: 'JavaScript',
+        description: 'Run JavaScript commands in a sandboxed environment. To access to the MathJS scope use "mathjs" global variable. To send JS objects to the MathJS environment, use send(name, value) method. To see the outputs of your command, open the browser console window',
+        examples: [],
+        name: 'js',
+        seealso: [],
+        syntax: [
+          'js(\'alert(9)\')',
+          'js(\'console.log(9)\')'
         ]
       };
 
       math.import({
+        'js': (code, name) => ({
+          type: 'js',
+          code,
+          name
+        }),
         'sql': (command, parameters) => ({
           type: 'async',
           command,
@@ -220,35 +237,16 @@ compute.import = (name, aa) => compute.exec(`${name.trim()} = squeeze(${JSON.str
   aa.values
 )})`);
 
-compute.exec = (exp, result, index, target) => {
+compute.exec = (exp, result, index) => {
   scope._index = index;
-  let r = math.eval(exp, scope);
-  const defered = [];
-  // async
-  if (r && r.entries && Array.isArray(r.entries)) {
-    r.entries.forEach((entry, i) => {
-      if (entry && entry.type === 'async') {
-        defered.push(entry);
-        r.entries.splice(i, 1, 'SQLite evaluation queued. Results will be reported');
-      }
-    });
-  }
-  else if (r && r.type === 'async') {
-    defered.push(r);
-    r = 'SQLite evaluation queued. Results will be reported';
-  }
-  for (const d of defered) {
-    api.emit('execute.sql', {
-      query: d.command,
-      parameters: d.parameters,
-      result,
-      target
-    });
-  }
-
-  return r && r.type ? r : math.format(r);
+  return math.eval(exp, scope);
 };
 
-compute.last = o => scope.last = o;
+compute.set = (name, val) => scope[name] = val;
+Object.defineProperty(compute, 'scope', {
+  get() {
+    return scope;
+  }
+});
 
 export default compute;

@@ -38,14 +38,16 @@ const history = {};
 
     update();
     const append = ({query}) => {
-      query = query.trim();
-      historyArray.unshift(query);
-      historyArray = historyArray.filter((s, i, l) => s && l.indexOf(s) === i);
-      historyArray = historyArray.slice(0, historyLength);
-      chrome.storage.local.set({
-        historyArray
-      });
-      update();
+      if (query) {
+        query = query.trim();
+        historyArray.unshift(query);
+        historyArray = historyArray.filter((s, i, l) => s && l.indexOf(s) === i);
+        historyArray = historyArray.slice(0, historyLength);
+        chrome.storage.local.set({
+          historyArray
+        });
+        update();
+      }
     };
     api.on('execute.math', append);
     api.on('execute.sql', append);
