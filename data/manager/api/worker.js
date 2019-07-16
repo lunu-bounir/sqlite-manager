@@ -1,20 +1,22 @@
-/* globals SQL */
+/* globals initSqlJs */
 'use strict';
 
-self.importScripts('../vendor/sql.js');
+self.importScripts('../vendor/sql-wasm.js');
 
-var dbs = {};
+const dbs = {};
 
 self.onmessage = ({data}) => {
   try {
     if (data.action === 'open') {
-      if (data.buffer) {
-        dbs[data.id] = new SQL.Database(data.buffer);
-        delete data.buffer;
-      }
-      else {
-        dbs[data.id] = new SQL.Database();
-      }
+      initSqlJs().then(SQL => {
+        if (data.buffer) {
+          dbs[data.id] = new SQL.Database(data.buffer);
+          delete data.buffer;
+        }
+        else {
+          dbs[data.id] = new SQL.Database();
+        }
+      });
     }
     else if (data.action === 'close') {
       dbs[data.id].close();

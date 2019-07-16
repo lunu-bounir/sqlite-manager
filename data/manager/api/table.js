@@ -1,7 +1,17 @@
 /* globals api */
 const editor = document.getElementById('editor');
 editor.input = editor.querySelector('textarea');
-editor.input.addEventListener('keydown', e => api.box.keydown(e));
+editor.input.addEventListener('keydown', e => {
+  if (e.code === 'Escape') {
+    editor.close(e);
+  }
+  else if (e.code === 'KeyE' && (e.metaKey || e.ctrlKey)) {
+    e.stopPropagation();
+    e.preventDefault();
+    editor.querySelector('[data-cmd="execute"]').click();
+  }
+  api.box.keydown(e);
+});
 editor.open = (pos, mode = 'sql', placeholder = '') => {
   editor.input.value = '';
   editor.style.left = pos.left + 'px';
@@ -18,7 +28,7 @@ editor.close = (e, stop = true) => {
     editor.tr.dataset.editor = false;
   }
   catch (e) {}
-  if (stop) {
+  if (stop && e) {
     e.stopPropagation();
   }
 };
