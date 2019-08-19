@@ -44,5 +44,4 @@ sandbox.execute = code => new Promise((resolve, reject) => {
     scope: api.compute.scope
   }, '*');
 });
-
 export default sandbox;

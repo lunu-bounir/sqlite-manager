@@ -1,13 +1,23 @@
-html {
-  height: 100%;
+:root {
+  --button-fg-color: #000;
+  --button-bg-color: rgba(0, 0, 0, 0.08);
+  --box-bg-color: #ffffe8;
+  --box-bg-active-color: #ffffd1;
+}
+html,
+body {
+  height: 100vh;
+  background-color: #fff;
 }
 body {
-  font-size: 12px;
-  height: 100%;
   margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 body,
+table,
 pre {
+  font-size: 12px;
   font-family: "Helvetica Neue",Helvetica,sans-serif !important;
 }
 select,
@@ -16,7 +26,6 @@ input[type=submit] {
   border: none;
   margin-left: 2px;
   color: #000;
-  background-color: #dedede;
   cursor: pointer;
   outline: none;
 }
@@ -27,19 +36,45 @@ input[type=submit]:active {
 input[type=file] {
   display: none;
 }
+#tools {
+  white-space: nowrap;
+  height: 28px;
+  position: relative;
+}
+
 .list {
   position: relative;
-  display: inline-block;
   user-select: none;
+  height: 100%;
+  display: inline-flex;
+  margin-right: 2px;
+}
+@media screen and (max-width: 500px) {
+  #tools [data-id="commands"] {
+    overflow-x: auto;
+  }
+  .list {
+    position: unset
+  }
+  .list ul {
+    width: calc(100vw - 6px);
+  }
 }
 .list label {
   cursor: pointer;
 }
+#dbs,
 .list>span {
   cursor: pointer;
-  margin-left: 5px;
-  padding: 5px 10px;
-  background-color: rgba(0,0,0,0.1);
+  color: var(--button-fg-color);
+  background-color: var(--button-bg-color);
+  padding: 0 10px;
+}
+#dbs {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  height: 100%;
 }
 .list[data-disabled=true] {
   pointer-events: none;
@@ -49,8 +84,8 @@ input[type=file] {
 }
 .list ul {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 12px;
+  left: 2px;
   z-index: 2;
   background-color: #fff;
   border: solid 1px #ebebeb;
@@ -91,7 +126,6 @@ input[type=file] {
   background-color: rgba(0, 0, 0, 0.1);
 }
 .list:not(:hover) ul {
-  transition-delay: .25s;
   visibility: hidden;
   opacity: 0;
 }
@@ -124,10 +158,6 @@ input[type=file] {
   pointer-events: none;
 }
 
-#tools {
-  margin: 10px;
-  white-space: nowrap;
-}
 #viewer {
   overflow-x: hidden;
   overflow-y: auto;
@@ -164,16 +194,19 @@ input[type=file] {
 }
 #box div[data-id="command-box"] textarea {
   border: none;
-  background-color: #ffffe8;
+  background-color: var(--box-bg-color);
+  border: solid 5px var(--box-bg-color);
   outline: none;
   resize: none;
   box-sizing: border-box;
 }
 #box div[data-id="command-box"] textarea:focus {
-  background-color: #FFFFD1;
+  background-color: var(--box-bg-active-color);
+  border-color: var(--box-bg-active-color);
 }
 #box div[data-id=result][data-mode=busy] {
-  background-image: url(loading.gif);
+  background-image: url('three-dots.svg');
+  background-size: 40px;
   background-repeat: no-repeat;
   background-position: right center;
   min-height: 22px;
@@ -267,6 +300,7 @@ input[type=file] {
   border: none;
   padding: 5px;
   outline: none;
+  max-width: calc(100vw - 90px);
 }
 #editor input {
   padding: 5px 10px;

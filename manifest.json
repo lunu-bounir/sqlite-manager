@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "version": "0.2.6",
+  "version": "0.2.7",
   "name": "SQLite Manager",
-  "description": "manage, edit, manipulate, plot and save one or multiple SQLite databases simultaneously",
-
+  "description": "manage, edit, manipulate with Math.js or JavaScript, plot and save one or more SQLite databases",
+  "offline_enabled": true,
   "icons": {
     "16": "data/icons/16.png",
     "19": "data/icons/19.png",
@@ -45,11 +45,5 @@
     "scripts": [
       "background.js"
     ]
-  },
-  "applications": {
-    "gecko": {
-      "id": "{7d2676a5-0546-4e2a-9019-aa9d8345be1e}",
-      "strict_min_version": "59.0"
-    }
   }
 }

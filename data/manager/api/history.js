@@ -19,7 +19,7 @@ const history = {};
     root.closest('.list').dataset.disabled = historyArray.length === 0;
   };
 
-  chrome.storage.local.get({
+  window.addEventListener('DOMContentLoaded', () => chrome.storage.local.get({
     historyArray,
     historyLength
   }, prefs => {
@@ -51,7 +51,7 @@ const history = {};
     };
     api.on('execute.math', append);
     api.on('execute.sql', append);
-  });
+  }));
 
   history.clear = () => {
     historyArray = [];

@@ -11,7 +11,7 @@ import './file.js';
 import Table from './table.js';
 import sandbox from './sandbox.js';
 
-var api = new EventEmitter();
+const api = new EventEmitter();
 window.api = api;
 
 {
@@ -37,6 +37,7 @@ api.require = src => new Promise(resolve => {
     resolve();
     document.documentElement.removeChild(script);
   };
+  script.onerror = () => alert(`cannot load "${src}"`);
   document.documentElement.appendChild(script);
 });
 

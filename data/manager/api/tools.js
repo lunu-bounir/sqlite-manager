@@ -1,11 +1,14 @@
 /* globals api */
+
+import values from '../values.js';
+
 const select = document.getElementById('dbs');
 const tools = {};
 
 tools.add = (name, id) => {
   const option = document.createElement('option');
   option.value = id;
-  option.textContent = id + ' -> ' + name;
+  option.textContent = id + ' :: ' + name;
   option.selected = true;
   select.appendChild(option);
 };
@@ -22,8 +25,12 @@ tools.name = () => {
   return 'unknown';
 };
 
-document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', async ({target}) => {
-  const value = target.dataset.value;
+const mousedown = ({target}) => {
+  let value = target.dataset.value;
+  if (value && value.startsWith('values:')) {
+    const id = value.replace('values:', '');
+    value = values[id];
+  }
   if (value) {
     const msg = value
       .replace('%id%', tools.id)
@@ -79,6 +86,18 @@ document.querySelector('#tools [data-id=commands]').addEventListener('mousedown'
       url: 'http://mathjs.org/docs/reference/functions.html'
     });
   }
-});
+  else if (cmd === 'fullscreen') {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+    else {
+      document.body.requestFullscreen().catch(err => {
+        alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    }
+  }
+};
+document.querySelector('#tools [data-id=commands]').addEventListener('mousedown', mousedown);
+document.querySelector('#tools [data-id=commands]').addEventListener('touchend', mousedown);
 
 export default tools;

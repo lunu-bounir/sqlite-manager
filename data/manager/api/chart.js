@@ -15,6 +15,10 @@ chart.init = () => {
 chart.plot = (arrs, result) => {
   const canvas = document.createElement('canvas');
   canvas.setAttribute('height', 60);
+  canvas.style = `
+    height: 200px;
+    min-height: 200px;
+  `;
   result.appendChild(canvas);
   const ctx = canvas.getContext('2d');
 
@@ -98,6 +102,10 @@ chart.plot = (arrs, result) => {
       })
     },
     options: {
+      maintainAspectRatio: false,
+      animation: {
+        duration: 100
+      },
       scales: {
         xAxes: arrs.filter(({query = ''}, i) => i === 0 || query.indexOf('axis=true') !== -1)
           .map(({query = ''}) => {
@@ -127,7 +135,9 @@ chart.plot = (arrs, result) => {
             }
             if (query.indexOf('parser') !== -1) {
               axis.type = 'time';
-              axis.time = {parser : props.parser}
+              axis.time = {
+                parser: props.parser
+              };
             }
             return axis;
           })
@@ -136,7 +146,6 @@ chart.plot = (arrs, result) => {
   };
 
   new Chart(ctx, data);
-  result.scrollIntoView();
 };
 
 export default chart;

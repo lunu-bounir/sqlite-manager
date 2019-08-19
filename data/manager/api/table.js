@@ -14,13 +14,12 @@ editor.input.addEventListener('keydown', e => {
 });
 editor.open = (pos, mode = 'sql', placeholder = '') => {
   editor.input.value = '';
-  editor.style.left = pos.left + 'px';
+  editor.style.left = Math.max(5, pos.left) + 'px';
   editor.style.top = pos.top + 'px';
   editor.dataset.mode = mode;
   editor.input.placeholder = placeholder;
   editor.dataset.visible = true;
   editor.input.focus();
-  editor.scrollIntoView();
 };
 editor.close = (e, stop = true) => {
   editor.dataset.visible = false;
@@ -95,52 +94,73 @@ const Table = function(root, columns, values) {
   this.columns = columns;
   this.values = values;
 
+  const dblclick = e => {
+    const td = e.target;
+    const tr = td.closest('tr');
+
+    const rect = td.getBoundingClientRect();
+    editor.tr = tr;
+    editor.columns = root.columns;
+    try {
+      const obj = this.parse(this.root.index, tr.index, td.index);
+
+      let statement = 'UPDATE ';
+      statement += api.format.sql.toColumns([obj.table]);
+      statement += ' SET ';
+      statement += api.format.sql.toColumns([obj.selected.name]);
+      statement += ' = ';
+      let start = statement.length;
+      statement += api.format.sql.toValues([obj.selected.value]);
+      let end = statement.length;
+      if (statement.endsWith('"')) {
+        start += 1;
+        end -= 1;
+      }
+      statement += ' WHERE ';
+      statement += api.format.sql.toColumns([obj.id.name]);
+      statement += ' = ';
+      statement += api.format.sql.toValues([obj.id.value]);
+
+      window.setTimeout(() => {
+        const offset = rect.left + 380 - document.documentElement.clientWidth;
+        editor.open({
+          left: rect.left + (offset > 0 ? -offset : 0),
+          top: rect.top
+        });
+        editor.input.value = statement;
+        editor.input.selectionStart = start;
+        editor.input.selectionEnd = end;
+        tr.dataset.editor = true;
+        tr.dataset.selected = true;
+      });
+    }
+    catch (e) {
+      api.notify('Cannot edit this value: ' + e.message);
+    }
+  };
+
   root.addEventListener('click', e => {
     const td = e.target;
     if (td.tagName === 'TD' && e.detail === 2) {
-      const tr = td.closest('tr');
-
-      const rect = td.getBoundingClientRect();
-      editor.tr = tr;
-      editor.columns = root.columns;
-      try {
-        const obj = this.parse(this.root.index, tr.index, td.index);
-
-        let statement = 'UPDATE ';
-        statement += api.format.sql.toColumns([obj.table]);
-        statement += ' SET ';
-        statement += api.format.sql.toColumns([obj.selected.name]);
-        statement += ' = ';
-        let start = statement.length;
-        statement += api.format.sql.toValues([obj.selected.value]);
-        let end = statement.length;
-        if (statement.endsWith('"')) {
-          start += 1;
-          end -= 1;
-        }
-        statement += ' WHERE ';
-        statement += api.format.sql.toColumns([obj.id.name]);
-        statement += ' = ';
-        statement += api.format.sql.toValues([obj.id.value]);
-
-        window.setTimeout(() => {
-          const offset = rect.left + 380 - document.documentElement.clientWidth;
-          editor.open({
-            left: rect.left + (offset > 0 ? -offset : 0),
-            top: rect.top
-          });
-          editor.input.value = statement;
-          editor.input.selectionStart = start;
-          editor.input.selectionEnd = end;
-          tr.dataset.editor = true;
-          tr.dataset.selected = true;
-        });
-      }
-      catch (e) {
-        api.notify('Cannot edit this value: ' + e.message);
-      }
+      dblclick(e);
     }
   });
+  root.addEventListener('taphold', e => {
+    const td = e.target;
+    if (td.tagName === 'TD') {
+      dblclick(e);
+    }
+  });
+  let mylatesttap;
+  function doubletap(e) {
+    const now = Date.now();
+    const timesince = now - mylatesttap;
+    if ((timesince < 600) && (timesince > 0)) {
+      dblclick(e);
+    }
+    mylatesttap = Date.now();
+  }
+  root.addEventListener('touchstart', doubletap);
 };
 Table.prototype.add = function() {
   const input = document.createElement('input');

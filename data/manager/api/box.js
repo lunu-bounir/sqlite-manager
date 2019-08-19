@@ -116,13 +116,8 @@ You can run one or more SQLite or Math.js commands in each computational box. To
   // RESIZE
   const resize = () => {
     const scrollTop = viewer.scrollTop;
-    input.style.height = '20px';
-    input.style.height = input.scrollHeight + 'px';
-    input.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'nearest'
-    });
+    input.style.height = '30px';
+    input.style.height = (input.scrollHeight + 10) + 'px';
     // keep the scroll top position; test with very long content
     viewer.scrollTop = scrollTop;
   };
@@ -175,9 +170,8 @@ You can run one or more SQLite or Math.js commands in each computational box. To
   });
   input.addEventListener('focus', e => box.active = e.target);
   root.appendChild(clone);
-  input.focus();
   resize();
-  window.setTimeout(() => result.scrollIntoView());
+  window.setTimeout(() => input.focus());
   box.active = input;
 };
 

@@ -14,6 +14,7 @@ api.on('db.file', async (file, name = 'unknown db') => {
     console.error(e);
   }
 });
+
 api.on('csv.file', file => {
   const reader = new FileReader();
   reader.onload = async () => {
@@ -36,6 +37,7 @@ api.on('csv.file', file => {
 
   reader.readAsText(file, 'utf-8');
 });
+
 api.on('json.file', file => {
   const reader = new FileReader();
   reader.onload = async () => {
@@ -53,6 +55,7 @@ api.on('json.file', file => {
 });
 
 api.on('execute.sql', async ({query, parameters, result, target}) => {
+  const activeElement = api.box.active;
   if (query) {
     result.dataset.mode = 'busy';
     await api.sql.parse.init();
@@ -70,17 +73,16 @@ api.on('execute.sql', async ({query, parameters, result, target}) => {
       api.box.print(e, result);
       delete result.dataset.mode;
     }
-    target.scrollIntoView({
-      block: 'start',
-      inline: 'nearest'
-    });
   }
   else {
     api.box.print('Empty command', result, 'warning');
   }
+  target.focus();
+  activeElement.focus();
 });
 
 api.on('execute.math', async ({query, result, index, target}) => {
+  const activeElement = api.box.active;
   try {
     await api.compute.init();
     let r = await api.compute.exec(query, result, index, target);
@@ -105,4 +107,7 @@ api.on('execute.math', async ({query, result, index, target}) => {
     console.error(e);
     api.box.print(e.message, result, 'error');
   }
+  target.focus();
+  activeElement.focus();
 });
+

@@ -1,6 +1,6 @@
 {
   "extends": [
-    "../../../../../../.eslintrc.json"
+    "/root/.eslintrc.json"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
