@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.2.7",
+  "version": "0.3.0",
   "name": "SQLite Manager",
-  "description": "manage, edit, manipulate with Math.js or JavaScript, plot and save one or more SQLite databases",
+  "description": "manage, manipulate, plot and save one or more SQLite databases or import CSV records",
   "offline_enabled": true,
   "icons": {
     "16": "data/icons/16.png",
@@ -14,32 +14,18 @@
     "128": "data/icons/128.png",
     "256": "data/icons/256.png"
   },
-
   "permissions": [
-    "storage"
+    "storage",
+    "contextMenus"
   ],
-
   "optional_permissions": [
     "*://*/*"
   ],
-
   "sandbox": {
-    "pages": ["data/manager/sandbox.html"]
+    "pages": ["data/manager-old/sandbox.html"]
   },
-
-  "browser_action": {
-    "default_icon": {
-      "16": "data/icons/16.png",
-      "19": "data/icons/19.png",
-      "32": "data/icons/32.png",
-      "38": "data/icons/38.png",
-      "48": "data/icons/48.png",
-      "64": "data/icons/64.png"
-    }
-  },
-
+  "browser_action": {},
   "homepage_url": "http://add0n.com/sqlite-manager.html",
-
   "background": {
     "persistent": false,
     "scripts": [

@@ -1,0 +1,103 @@
+:root {
+  --bg: #fff;
+  --footer-bg: #efefef;
+  --button-bg: #dadada;
+}
+body {
+  font-size: 13px;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100vh;
+  margin: 0;
+}
+footer {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  background-color: var(--footer-bg);
+  padding: 2px;
+}
+footer > div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  white-space: nowrap;
+  overflow: hidden;
+}
+@media screen and (max-width: 600px) {
+  #sample {
+    display: none;
+  }
+  #link {
+    display: none;
+  }
+}
+@media screen and (max-width: 400px) {
+  footer svg {
+    display: none;
+  }
+}
+footer > div > * {
+  margin-right: 2px;
+}
+button,
+input[type=button],
+footer select {
+  border: none;
+  background-color: var(--button-bg);
+  padding: 4px 10px;
+  outline: none;
+  height: 100%;
+  cursor: pointer;
+  max-width: 120px;
+}
+input[type=button]:disabled,
+button:disabled {
+  color: #a0a0a0;
+  text-shadow: 1px 1px #fcffff;
+  cursor: default;
+}
+section {
+  position: relative;
+  overflow: auto;
+}
+section:empty::before {
+  content: 'Welcome to SQLite Manager \A \A Drag and drop SQLite databases or press the "New" button to start \A Drop CSV file to import records to the active SQLite database';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre;
+  text-align: center;
+}
+section box-view {
+  width: calc(100vw - 10px);
+  overflow: hidden;
+  display: block;
+}
+#history-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#history-container select {
+  background-color: #fff;
+  outline: none;
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 30px;
+  height: 25%;
+  border: none;
+  z-index: 10;
+}
+.hidden {
+  display: none !important;
+}

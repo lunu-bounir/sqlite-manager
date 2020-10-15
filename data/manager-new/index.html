@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SQLite Manager</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+</head>
+<body>
+  <header>
+  </header>
+  <section id="boxes"></section>
+  <footer>
+    <div>
+      <svg width="16" height="16" viewBox="0 0 512 512">
+        <rect x=60 y=20 width="400" height="120" fill="#8ea5bc"/>
+        <rect x=60 y=185 width="400" height="120" fill="#8ea5bc"/>
+        <rect x=60 y=352 width="400" height="120" fill="#8ea5bc"/>
+      </svg>
+      Database&nbsp;
+      <button id="new" title="Ctrl + Shift + N or Command + Shift + N">N<u>e</u>w</button>
+      <button id="sample">Sample</button>
+      &nbsp;
+      <svg height="16" viewBox="0 0 1024 896">
+        <path d="M832 192c0 0-320 0-352 0s-32-32-32-32 0-21.25 0-32c0-64-64-64-64-64s-256 0-320 0S0 128 0 128v704h896c0 0 0-510 0-576S832 192 832 192zM384 192H64v-32c0 0 0-32 32-32h256c32 0 32 32 32 32V192z" fill="#8ea5bc"/>
+      </svg>
+      Open&nbsp;
+      <button id="file" title="Ctrl + Shift + F or Command + Shift + F">File (<u>O</u>)</button>
+      <button id="link" title="Ctrl + Shift + L or Command + Shift + L"><u>L</u>ink</button>
+      &nbsp;&nbsp;
+      <button id="save" title="Ctrl + Shift + S or Command + Shift + S" disabled><u>S</u>ave</button>
+      &nbsp;
+    <svg width=20 viewBox="0 0 32 32" >
+      <path d="M29,21c-0.6,0-1,0.4-1,1v3h-3c-0.6,0-1,0.4-1,1s0.4,1,1,1h4c0.6,0,1-0.4,1-1v-4C30,21.4,29.6,21,29,21z" fill="#8ea5bc"/>
+      <path d="M19,25h-6c-0.6,0-1,0.4-1,1s0.4,1,1,1h6c0.6,0,1-0.4,1-1S19.6,25,19,25z" fill="#8ea5bc"/>
+      <path d="M7,25H4v-3c0-0.6-0.4-1-1-1s-1,0.4-1,1v4c0,0.6,0.4,1,1,1h4c0.6,0,1-0.4,1-1S7.6,25,7,25z" fill="#8ea5bc"/>
+      <path d="M3,19c0.6,0,1-0.4,1-1v-4c0-0.6-0.4-1-1-1s-1,0.4-1,1v4C2,18.6,2.4,19,3,19z" fill="#8ea5bc"/>
+      <path d="M7,5H3C2.4,5,2,5.4,2,6v4c0,0.6,0.4,1,1,1s1-0.4,1-1V7h3c0.6,0,1-0.4,1-1S7.6,5,7,5z" fill="#8ea5bc"/>
+      <path d="M19,5h-6c-0.6,0-1,0.4-1,1s0.4,1,1,1h6c0.6,0,1-0.4,1-1S19.6,5,19,5z" fill="#8ea5bc"/>
+      <path d="M29,5h-4c-0.6,0-1,0.4-1,1s0.4,1,1,1h3v3c0,0.6,0.4,1,1,1s1-0.4,1-1V6C30,5.4,29.6,5,29,5z" fill="#8ea5bc"/>
+      <path d="M29,13c-0.6,0-1,0.4-1,1v4c0,0.6,0.4,1,1,1s1-0.4,1-1v-4C30,13.4,29.6,13,29,13z" fill="#8ea5bc"/>
+    </svg>
+      Box&nbsp;
+      <button id="add" title="Ctrl + Shift + B or Command + Shift + B" disabled><u>A</u>dd</button>
+      <button id="clear" title="Ctrl + Shift + B or Command + Shift + B"><u>C</u>lear</button>
+    </div>
+    <div>
+      <button id="history" title="Ctrl + Shift + H or Command + Shift + H" disabled><u>H</u>istory</button>
+      &nbsp;Active&nbsp;
+      <select id="active" title="use Ctrl + Shift + Number or Command + Shift + Number to switch">
+        <option disabled selected>None</option>
+      </select>
+    </div>
+  </footer>
+  <div id="history-container" class="hidden">
+    <select size="10"></select>
+  </div>
+  <script type="text/javascript" src="components/table-view/core.js"></script>
+  <script type="module" src="components/box-view/core.js"></script>
+  <script type="text/javascript" src="file.js"></script>
+  <script type="text/javascript" src="sql.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="history.js"></script>
+</body>
+</html>

@@ -145,12 +145,6 @@ const Table = function(root, columns, values) {
       dblclick(e);
     }
   });
-  root.addEventListener('taphold', e => {
-    const td = e.target;
-    if (td.tagName === 'TD') {
-      dblclick(e);
-    }
-  });
   let mylatesttap;
   function doubletap(e) {
     const now = Date.now();
