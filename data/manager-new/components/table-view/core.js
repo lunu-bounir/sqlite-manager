@@ -281,7 +281,7 @@ class SelectTableView extends ResizeTableView {
         e.dataTransfer.setDragImage(img, 0, 0);
 
         const {target} = e;
-        if (target.closest('section')) {
+        if (target.closest('section') && e.isTrusted) {
           const drag = this.drag.bind(this, target.dataset.x, target.dataset.y);
           shadowRoot.addEventListener('dragenter', drag);
           document.ondragend = () => {
@@ -298,23 +298,25 @@ class SelectTableView extends ResizeTableView {
     });
   }
   drag(x, y, e) {
-    const xs = [x, e.target.dataset.x].map(Number);
-    const ys = [y, e.target.dataset.y].map(Number);
+    if (e.target && e.target.nodeType === Node.ELEMENT_NODE) {
+      const xs = [x, e.target.dataset.x].map(Number);
+      const ys = [y, e.target.dataset.y].map(Number);
 
-    const section = this.shadowRoot.querySelector('section');
-    // clear
-    for (const div of [...section.querySelectorAll('.dragged')]) {
-      div.classList.remove('dragged');
-    }
-    if (e.metaKey === false) {
-      for (const div of [...section.querySelectorAll('.selected')]) {
-        div.classList.remove('selected');
+      const section = this.shadowRoot.querySelector('section');
+      // clear
+      for (const div of [...section.querySelectorAll('.dragged')]) {
+        div.classList.remove('dragged');
       }
-    }
+      if (e.metaKey === false) {
+        for (const div of [...section.querySelectorAll('.selected')]) {
+          div.classList.remove('selected');
+        }
+      }
 
-    for (let i = Math.min(...xs); i <= Math.max(...xs); i += 1) {
-      for (let j = Math.min(...ys); j <= Math.max(...ys); j += 1) {
-        section.querySelector(`[data-x="${i}"][data-y="${j}"]`).classList.add('dragged');
+      for (let i = Math.min(...xs); i <= Math.max(...xs); i += 1) {
+        for (let j = Math.min(...ys); j <= Math.max(...ys); j += 1) {
+          section.querySelector(`[data-x="${i}"][data-y="${j}"]`).classList.add('dragged');
+        }
       }
     }
   }

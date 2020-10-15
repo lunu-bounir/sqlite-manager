@@ -16,7 +16,8 @@
   },
   "permissions": [
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "notifications"
   ],
   "optional_permissions": [
     "*://*/*"

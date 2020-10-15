@@ -5,14 +5,14 @@ window.config = {
 window.active = () => {
   return document.getElementById('active').selectedOptions[0];
 };
-window.notify = msg => Notification.requestPermission().then(permission => {
-  if (permission === 'granted') {
-    new Notification(msg);
-  }
-  else {
-    alert(msg);
-  }
-});
+window.notify = msg => {
+  chrome.notifications.create({
+    type: 'basic',
+    iconUrl: '/data/icons/48.png',
+    title: chrome.runtime.getManifest().name,
+    message: msg
+  });
+};
 
 // statements = ['query', 'query $[n][m][y][x]', {query: 'query'}]
 window.compute = (statements, box, option, runs = []) => {

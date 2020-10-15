@@ -18,17 +18,24 @@ class SQL {
   open(file) {
     if (file.href) {
       return new Promise((resolve, reject) => {
-        chrome.permissions.request({
-          origins: [file.href]
-        }, () => {
-          chrome.runtime.lastError;
-          fetch(file.href).then(r => r.arrayBuffer()).then(ab => {
-            return this.post({
-              method: 'open-binary',
-              value: new Uint8Array(ab)
-            });
-          }).then(resolve, reject);
-        });
+        const next = () => fetch(file.href).then(r => r.arrayBuffer()).then(ab => {
+          return this.post({
+            method: 'open-binary',
+            value: new Uint8Array(ab)
+          });
+        }).then(resolve, reject);
+
+        try {
+          chrome.permissions.request({
+            origins: [file.href]
+          }, () => {
+            chrome.runtime.lastError;
+            next();
+          });
+        }
+        catch (e) {
+          next();
+        }
       });
     }
     else if (file.size) {
@@ -84,7 +91,10 @@ window.file.on.activate(file => {
           file.option
         );
       }
-    }).catch(e => window.notify(e.message));
+    }).catch(e => {
+      console.error(e);
+      window.notify(e.message);
+    });
   }
 });
 
