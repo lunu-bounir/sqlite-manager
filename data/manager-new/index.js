@@ -63,11 +63,14 @@ window.compute = (statements, box, option, runs = []) => {
         e.focus();
       }
     });
+    option = option || window.active();
+    box.origin(option.number);
+    option = null;
     box.addEventListener('submit', () => {
       if (box.question.trim()) {
         option = option || window.active();
-        const file = option.file;
         box.origin(option.number);
+        const file = option.file;
         option = null;
         const sql = file.sql;
         sql.execute(box.question, box.params).then(a => {

@@ -98,12 +98,6 @@ window.file.on.activate(file => {
   }
 });
 
-document.addEventListener('keydown', e => {
-  const meta = (e.metaKey || e.ctrlKey) && e.shiftKey;
-  if (e.code === 'KeyA' && meta) {
-    document.getElementById('add').click();
-  }
-});
 document.getElementById('add').addEventListener('click', () => {
   window.compute('', undefined, window.active());
 });

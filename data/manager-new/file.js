@@ -144,6 +144,7 @@ document.getElementById('sample').addEventListener('click', () => {
 });
 document.getElementById('save').addEventListener('click', () => {
   const file = document.getElementById('active').selectedOptions[0].file;
+  console.log(123);
   file.sql.export().then(ab => {
     const blob = new Blob([ab], {
       type: 'application/octet-stream'
@@ -159,24 +160,33 @@ document.getElementById('save').addEventListener('click', () => {
 
 document.addEventListener('keydown', e => {
   const meta = (e.metaKey || e.ctrlKey) && e.shiftKey;
-  if (e.code === 'KeyO' && meta) {
+  const stop = () => {
     e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+  };
+  if (e.code === 'KeyA' && meta) {
+    stop();
+    document.getElementById('add').click();
+  }
+  else if (e.code === 'KeyO' && meta) {
+    stop();
     document.getElementById('file').click();
   }
   else if (e.code === 'KeyL' && meta) {
-    e.preventDefault();
+    stop();
     document.getElementById('link').click();
   }
   else if (e.code === 'KeyE' && meta) {
-    e.preventDefault();
+    stop();
     document.getElementById('new').click();
   }
   else if (e.code === 'KeyS' && meta) {
-    e.preventDefault();
+    stop();
     document.getElementById('save').click();
   }
   else if (e.code.startsWith('Digit') && meta) {
-    e.preventDefault();
+    stop();
     const active = document.getElementById('active');
     const option = active.options[Number(e.key)];
     if (option) {

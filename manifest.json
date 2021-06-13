@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "version": "0.3.0",
+  "version": "0.3.1",
   "name": "SQLite Manager",
-  "description": "manage, manipulate, plot and save one or more SQLite databases or import CSV records",
+  "description": "Manage, manipulate, and plot one or more SQLite databases and optionally import and export records to a CSV table",
   "offline_enabled": true,
   "icons": {
     "16": "data/icons/16.png",

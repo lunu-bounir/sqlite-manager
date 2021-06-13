@@ -273,6 +273,9 @@ class SelectTableView extends ResizeTableView {
     });
     const img = new Image();
     img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    img.style = `
+      position: absolute;
+    `;
 
     document.body.appendChild(img);
     const section = shadowRoot.querySelector('section');
