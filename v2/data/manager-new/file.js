@@ -144,7 +144,6 @@ document.getElementById('sample').addEventListener('click', () => {
 });
 document.getElementById('save').addEventListener('click', () => {
   const file = document.getElementById('active').selectedOptions[0].file;
-  console.log(123);
   file.sql.export().then(ab => {
     const blob = new Blob([ab], {
       type: 'application/octet-stream'

@@ -1,0 +1,339 @@
+:root {
+  --button-fg-color: #000;
+  --button-bg-color: rgba(0, 0, 0, 0.08);
+  --box-bg-color: #ffffe8;
+  --box-bg-active-color: #ffffd1;
+}
+html,
+body {
+  height: 100vh;
+  background-color: #fff;
+}
+body {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+body,
+table,
+pre {
+  font-size: 12px;
+  font-family: "Helvetica Neue",Helvetica,sans-serif !important;
+}
+select,
+input[type=button],
+input[type=submit] {
+  border: none;
+  margin-left: 2px;
+  color: #000;
+  cursor: pointer;
+  outline: none;
+}
+input[type=button]:active,
+input[type=submit]:active {
+  opacity: 0.5;
+}
+input[type=file] {
+  display: none;
+}
+#tools {
+  white-space: nowrap;
+  height: 28px;
+  position: relative;
+}
+
+.list {
+  position: relative;
+  user-select: none;
+  height: 100%;
+  display: inline-flex;
+  margin-right: 2px;
+}
+@media screen and (max-width: 500px) {
+  #tools [data-id="commands"] {
+    overflow-x: auto;
+  }
+  .list {
+    position: unset
+  }
+  .list ul {
+    width: calc(100vw - 6px);
+  }
+}
+.list label {
+  cursor: pointer;
+}
+#dbs,
+.list>span {
+  cursor: pointer;
+  color: var(--button-fg-color);
+  background-color: var(--button-bg-color);
+  padding: 0 10px;
+}
+#dbs {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border-radius: 0;
+  height: 100%;
+}
+.list[data-disabled=true] {
+  pointer-events: none;
+}
+.list[data-disabled=true]>span {
+  opacity: 0.5;
+}
+.list ul {
+  position: absolute;
+  top: 12px;
+  left: 2px;
+  z-index: 2;
+  background-color: #fff;
+  border: solid 1px #ebebeb;
+  box-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+  list-style: none;
+  list-style-position: inside;
+  padding: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 5px 0;
+  visibility: visible;
+  opacity: 1;
+}
+.list ul[id=history] {
+  width: 200px;
+}
+.list ul:empty::before {
+  content: 'Empty list';
+  padding: 10px;
+  white-space: nowrap;
+  color: #ababab;
+  font-style: italic;
+}
+.list li {
+  padding: 3px 5px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list ul:not([id=history]) li {
+  display: flex;
+}
+.list li:not(.separator):empty {
+  display: none;
+}
+.list li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.list:not(:hover) ul {
+  visibility: hidden;
+  opacity: 0;
+}
+/* hide the menu when user clicks */
+.list:active ul {
+  display: none;
+}
+.list li.separator {
+  pointer-events: none;
+  border-top: solid 1px #ebebeb;
+  height: 5px;
+  margin-top: 5px;
+}
+.list li.separator:empty {
+  height: 0;
+  padding: 2px 0 0 0;
+  margin: 2px 0 0 0;
+}
+.list li.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+  justify-content: center;
+  font-weight: 500;
+}
+.list li>span {
+  color: #ccc;
+  margin-left: 10px;
+  flex: 1;
+  text-align: right;
+  pointer-events: none;
+}
+
+#viewer {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#box div[data-id="command-box"] {
+  position: relative;
+  margin: 10px;
+}
+#box div[data-id="command-box"]::after {
+  content: attr(data-index);
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  background-color: #75756c;
+  color: #fff;
+  padding: 0 2px;
+  font-size: 9px;
+  font-weight: 200;
+}
+#box div[data-id="command-box"]>span {
+  position: absolute;
+  display: inline-block;
+  width: 8px;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d3d3d3;
+  border-right: none;
+}
+#box div[data-id="command-box"]>div {
+  margin-left: 12px;
+  /* Firefox */
+  max-width: calc(100% - 12px);
+}
+#box div[data-id="command-box"] textarea {
+  border: none;
+  background-color: var(--box-bg-color);
+  border: solid 5px var(--box-bg-color);
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+}
+#box div[data-id="command-box"] textarea:focus {
+  background-color: var(--box-bg-active-color);
+  border-color: var(--box-bg-active-color);
+}
+#box div[data-id=result][data-mode=busy] {
+  background-image: url('three-dots.svg');
+  background-size: 40px;
+  background-repeat: no-repeat;
+  background-position: right center;
+  min-height: 22px;
+}
+#box div[data-id=result] {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+#box div[data-id=result] pre {
+  white-space: pre-line;
+}
+#box div[data-id=result] pre[data-type=error] {
+  color: red;
+}
+#box div[data-id=result] pre[data-type=sql],
+#box div[data-id=result] pre[data-type=note] {
+  color: #004aff;
+}
+#box div[data-id=result] pre[data-type=warning] {
+  color: #ccc;
+  font-style: italic;
+}
+#box div[data-id=result] table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  position: relative;
+}
+#box div[data-id=result] tr:nth-child(even){
+  background-color: rgba(0, 0, 0, 0.02);
+}
+#box div[data-id=result] tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+#box div[data-id=result] tbody tr[data-selected=true] {
+  background-color: #5353c3;
+  color: #fff;
+}
+#box div[data-id=result] tbody tr[data-editor=true] {
+  background-color: #d157be;
+  color: #fff;
+}
+#box div[data-id=result] thead th,
+#box div[data-id=result] tbody td {
+  white-space: nowrap;
+  padding: 5px;
+}
+#box div[data-id=result] tbody td:empty::before {
+  content: 'NULL';
+  color: #ccc;
+}
+#box div[data-id=result] thead th {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+#notify {
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  width: 350px;
+  height: 60px;
+  border: solid 1px #ebebeb;
+}
+#notify[data-hidden=true] {
+  display: none;
+}
+#notify>span {
+  height: 100%;
+}
+#notify>span:first-child {
+  display: inline-block;
+  width: 80px;
+  background: #fff url('../icons/32.png') center center no-repeat;
+  border-right: solid 1px #ebebeb;
+}
+#notify>span:last-child {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ebebeb;
+  padding-left: 10px;
+}
+
+#editor {
+  position: absolute;
+  background-color: #fff;
+  padding: 2px;
+  box-shadow: 1px 1px 2px 1px #e1dede;
+  background-color: #f5f5f5;
+}
+#editor textarea {
+  width: 300px;
+  border: none;
+  padding: 5px;
+  outline: none;
+  max-width: calc(100vw - 90px);
+}
+#editor input {
+  padding: 5px 10px;
+}
+#editor input:first-child {
+  margin-bottom: 2px;
+}
+#editor[data-visible=false] {
+  display: none;
+}
+
+[hbox] {
+  display: flex;
+}
+[vbox] {
+  display: flex;
+  flex-direction: column;
+}
+[pack=center] {
+  justify-content: center;
+}
+[align=start] {
+  align-items: flex-start;
+}
+[align=center] {
+  align-items: center;
+}
+[align=baseline] {
+  align-items: baseline;
+}
+[align=end] {
+  align-items: flex-end;
+}
+[flex="1"] {
+  flex: 1;
+}

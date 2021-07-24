@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style type="text/css">
+    body {
+      font-size: 13px;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <chart-view></chart-view>
+
+  <script type="module" src="core.js"></script>
+  <script type="module">
+    const view = document.querySelector('chart-view');
+
+    view.plot(['a', 'b', 'c', 'd', 'e' , 'f', 'g'], [{
+      label: 'line #1',
+      data: [1, 2, 3, 1, 7, 5, 12]
+    }, {
+      label: 'line #2',
+      data: [1, 2, 3, 1, 7, 5, 12].reverse()
+    }]);
+  </script>
+
+</body>
+</html>
