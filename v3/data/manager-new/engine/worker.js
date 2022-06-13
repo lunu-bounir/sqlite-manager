@@ -1,6 +1,6 @@
 /* global importScripts, initSqlJs */
 
-importScripts('./sqljs-wasm/sql.js');
+importScripts('./sqljs-wasm/sql-wasm.js');
 
 let SQL;
 let db;

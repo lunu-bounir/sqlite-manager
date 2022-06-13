@@ -34,6 +34,7 @@ window.compute = (statements, box, option, runs = []) => {
       return 'NA';
     }
   });
+
   if (statement === undefined) {
     return;
   }

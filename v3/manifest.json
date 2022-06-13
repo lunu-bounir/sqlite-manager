@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.4.1",
+  "version": "0.4.2",
   "name": "SQLite Manager",
   "description": "Manage, manipulate, and plot one or more SQLite databases and optionally import and export records to a CSV table",
   "offline_enabled": true,
@@ -19,12 +19,13 @@
     "contextMenus",
     "notifications"
   ],
-  "optional_permissions": [
+  "optional_host_permissions": [
     "*://*/*"
   ],
   "sandbox": {
     "pages": ["data/manager-old/sandbox.html"]
   },
+
   "action": {},
   "homepage_url": "https://add0n.com/sqlite-manager.html",
   "background": {

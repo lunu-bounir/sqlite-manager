@@ -21,7 +21,9 @@
       option.textContent = (statement || '').replace(/\n/g, '↵');
       select.appendChild(option);
     }
-    select.options[0].selected = true;
+    if (prefs.historyArray.length) {
+      select.options[0].selected = true;
+    }
     document.getElementById('history').disabled = prefs.historyArray.length === 0;
   });
   container.addEventListener('click', e => {
