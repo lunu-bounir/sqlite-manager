@@ -101,6 +101,7 @@ class BoxView extends HTMLElement {
           <div id="tools">
             <button id="plot" class="hidden" title="-> if one column is selected, plots the column data versus [0, 1, 2, ...]&#013;-> if multiple columns are selected, plots all columns versus the first column&#013;-> if Ctrl or Command key is pressed, plots all columns versus [0, 1, 2, ...]&#013;-> if the Shift key is pressed, plots each row versus the first row&#013;-> if the Shift + Ctrl keys or Shift + Command keys are pressed, plots all rows versus [0, 1, 2, ..]">Plot</button>
             <button id="export" class="hidden" title="downloads selected entries or the entire table as a comma-separated CVS file.">Export</button>
+            <button id="copy" title="copy selected rows to the clipboard">Copy</button>
             <button id="exec" title="executes the SQL statement on the active database">Execute (Enter)</button>
             <button id="close" title="removes the entire box and its results">Close</button>
           </div>
@@ -146,6 +147,26 @@ class BoxView extends HTMLElement {
         a.download = 'exported.csv';
         a.click();
         URL.revokeObjectURL(href);
+      }
+    });
+    shadowRoot.getElementById('copy').addEventListener('click', () => {
+      const columnDelimiter = ',';
+      const lineDelimiter = '\n';
+
+      const contents = [];
+
+      for (const view of [...shadowRoot.querySelectorAll('table-view')]) {
+        const content = view.export().map(a => {
+          return a.map(name => {
+            return typeof name === 'string' && name.includes(columnDelimiter) ? `"${name}"` : name;
+          }).join(columnDelimiter)
+        }).join(lineDelimiter);
+
+        contents.push(content);
+      }
+
+      if (contents.length) {
+        navigator.clipboard.writeText(contents.join('\n\n'));
       }
     });
     shadowRoot.getElementById('exec').addEventListener('click', () => {
@@ -216,6 +237,7 @@ class BoxView extends HTMLElement {
     answer.dataset.type = 'error';
     answer.textContent = msg;
     shadowRoot.getElementById('export').classList.add('hidden');
+    shadowRoot.getElementById('copy').classList.add('hidden');
   }
   get answer() {
     const {shadowRoot} = this;
@@ -257,10 +279,12 @@ class BoxView extends HTMLElement {
         });
       }
       shadowRoot.getElementById('export').classList.remove('hidden');
+      shadowRoot.getElementById('copy').classList.remove('hidden');
     }
     else {
       answer.textContent = msg;
       shadowRoot.getElementById('export').classList.add('hidden');
+      shadowRoot.getElementById('copy').classList.add('hidden');
     }
   }
   focus() {

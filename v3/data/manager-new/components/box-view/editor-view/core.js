@@ -1,5 +1,5 @@
-import './ace-builds-1.4.12/src/ace.js';
-import './ace-builds-1.4.12/src/ext-language_tools.js';
+import './ace-builds-1.5.0/src/ace.js';
+import './ace-builds-1.5.0/src/ext-language_tools.js';
 
 class EditorView extends HTMLElement {
   constructor() {
@@ -22,7 +22,7 @@ class EditorView extends HTMLElement {
       </div>
     `;
 
-    ace.config.set('basePath', (new URL(import.meta.url + '/../ace-builds-1.4.12/src/')).href);
+    ace.config.set('basePath', (new URL(import.meta.url + '/../ace-builds-1.5.0/src/')).href);
     ace.require('ace/ext/language_tools');
 
     const editor = this.editor = ace.edit(shadow.getElementById('editor'), {

@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "0.4.2",
+  "version": "0.4.4",
   "name": "SQLite Manager",
   "description": "Manage, manipulate, and plot one or more SQLite databases and optionally import and export records to a CSV table",
   "offline_enabled": true,
@@ -30,6 +30,9 @@
   "homepage_url": "https://add0n.com/sqlite-manager.html",
   "background": {
     "service_worker": "worker.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
   "commands": {
     "_execute_action": {
