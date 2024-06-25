@@ -5,7 +5,7 @@
   --button-bg: #dadada;
 }
 body {
-  font-size: 13px;
+  font-size: 14px;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   display: grid;
   grid-template-rows: min-content 1fr min-content;
@@ -48,7 +48,7 @@ input[type=button],
 footer select {
   border: none;
   background-color: var(--button-bg);
-  padding: 4px 10px;
+  padding: 6px 10px;
   outline: none;
   height: 100%;
   cursor: pointer;

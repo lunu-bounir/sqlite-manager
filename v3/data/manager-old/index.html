@@ -1,153 +1,152 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SQLite Manager</title>
-    <link rel="stylesheet" href="index.css">
-  </head>
-
-  <body data-mode=drag vbox>
-    <input type="file">
-    <div hbox id="tools">
-      <div data-id="commands" hbox>
-        <div class="list">
-          <span hbox align="center">File</span>
-          <ul>
-            <li data-cmd="query.file -> click">Open a Database</li>
-            <li data-cmd="api.emit -> db.file">Create a new Database</li>
-            <li data-cmd="sql.export">Download active Database</li>
-            <li class="separator"></li>
-            <li data-cmd="close">Close window</li>
-            <li class="separator"></li>
-            <li data-cmd="faqs">Open FAQs page</li>
-            <li data-cmd="sqlite -> help">Open SQLite help</li>
-            <li data-cmd="math.js -> help">Open Math.js help</li>
-            <li class="separator"></li>
-            <li data-cmd="fullscreen">Toggle Fullscreen</li>
-          </ul>
-        </div>
-        <div class="list">
-          <span hbox align="center">Manage</span>
-          <ul>
-            <li data-cmd="box.clean">Clear Window</li>
-            <li class="separator"></li>
-            <li data-value='db_new("my_database.sqlite")'>Create a new database<span>db_new</span></li>
-            <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
-            <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
-            <li class="separator"></li>
-            <li data-value="values:1">Inspect selected database<span>SELECT</span></li>
-            <li data-value="PRAGMA table_info(table_name)">Inspect table structure<span>PRAGMA</span></li>
-            <li data-value="values:2">Database info<span>PRAGMA</span></li>
-            <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
-            <li class="separator"></li>
-            <li data-cmd="open.js.editor">Open JavaScript editor</li>
-          </ul>
-        </div>
-        <div class="list">
-          <span hbox align="center">History</span>
-          <ul id="history">
-            <li class="separator"></li>
-            <li data-cmd="history.clear">Clear history</li>
-          </ul>
-        </div>
-        <div class="list">
-          <span hbox align="center">SQLite</span>
-          <ul>
-            <li class="disabled">Export</li>
-            <li data-value='values:3'>Export to math.js as a matrix<span>SELECT</span></li>
-            <li class="disabled">Managing Tables</li>
-            <li data-value='values:4'>Create a new table<span>CREATE</span></li>
-            <li data-value='ALTER TABLE table_name RENAME TO new_name'>Rename a table<span>ALTER</span></li>
-            <li data-value='ALTER TABLE table ADD COLUMN column_definition'>Add a new column to a table<span>ALTER</span></li>
-            <li data-value='ALTER TABLE table DROP COLUMN column_name'>Drop an existing column in a table<span>ALTER</span></li>
-            <li data-value='DROP TABLE [IF EXISTS] table_name;'>Drop a table and its data<span>DROP</span></li>
-            <li class="disabled">Managing Indexes</li>
-            <li data-value='values:31'>Creating an index<span>CREATE</span></li>
-            <li data-value='CREATE INDEX index_name ON table_name(expression)'>Create an expression index<span>CREATE</span></li>
-            <li class="disabled">Querying Data</li>
-            <li data-value='SELECT * FROM table_name limit 100'>Query all data from a table<span>SELECT</span></li>
-            <li data-value='values:5'>Query data from the specified column<span>SELECT</span></li>
-            <li data-value='values:6'>Query unique rows<span>SELECT</span></li>
-            <li data-value='values:7'>Query rows using a WHERE clause<span>SELECT</span></li>
-            <li data-value='values:30'>Rename column in the query’s output<span>SELECT</span></li>
-            <li data-value='values:8'>Query data from multiple tables<span>SELECT</span></li>
-            <li data-value='values:9'>Count rows returned by a query<span>SELECT</span></li>
-            <li data-value='values:10'>Sort rows using ORDER BY clause<span>SELECT</span></li>
-            <li data-value='values:11'>Group rows using GROUP BY clause<span>SELECT</span></li>
-            <li data-value='values:12'>Filter group of rows using HAVING clause<span>SELECT</span></li>
-            <li class="disabled">Changing Data</li>
-            <li data-value='values:13'>Insert a row into a table<span>INSERT</span></li>
-            <li data-value='values:14'>Insert multiple rows into a table<span>INSERT</span></li>
-            <li data-value='values:15'>Update all rows in a table<span>UPDATE</span></li>
-            <li data-value='values:16'>Update rows that match with a condition<span>UPDATE</span></li>
-            <li data-value='DELETE FROM table'>Delete all rows in a table<span>DELETE</span></li>
-            <li data-value='values:17'>Delete rows specified by a condition<span>DELETE</span></li>
-            <li class="disabled">Search</li>
-            <li data-value="values:18">Search using LIKE operator<span>SELECT</span></li>
-            <li data-value="values:19">Search using full-text search<span>SELECT</span></li>
-          </ul>
-        </div>
-        <div class="list">
-          <span hbox align="center">Math.js</span>
-          <ul>
-            <li data-value='values:20'>Arrays and matrices<span>matrix</span></li>
-            <li data-value="map(1:10, f(x) = x + 2)">Use functions<span>map</span></li>
-            <li data-value="values:32">Use SQL function<span>sql</span></li>
-            <li data-value="values:33">Use SQL function (parametric)<span>sql</span></li>
-            <li data-value="values:34">Use SQL function (parametric array)<span>sql</span></li>
-            <li data-value='values:21'>Zeros function<span>zeros</span></li>
-            <li data-value='values:22'>Ones function<span>ones</span></li>
-            <li data-value='values:23'>Range function<span>range</span></li>
-            <li data-value='values:24'>Size and Dimensions<span>size</span></li>
-
-          </ul>
-        </div>
-        <div class="list">
-          <span hbox align="center">Chart.js</span>
-          <ul>
-            <li data-value='values:25'>Line chart<span>plot</span></li>
-            <li data-value='values:26'>Time chart<span>plot</span></li>
-            <li data-value='values:35'>Scatter chart<span>plot</span></li>
-            <li data-value='values:27'>Bar chart<span>plot</span></li>
-            <li data-value='values:28'>Pie chart<span>plot</span></li>
-            <li data-value='values:29'>Doughnut chart<span>plot</span></li>
-          </ul>
-        </div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQLite Manager (old interface)</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body data-mode=drag vbox>
+  <input type="file">
+  <div hbox id="tools">
+    <div data-id="commands" hbox>
+      <div class="list">
+        <span hbox align="center">File</span>
+        <ul>
+          <li data-cmd="query.file -> click">Open a Database</li>
+          <li data-cmd="api.emit -> db.file">Create a new Database</li>
+          <li data-cmd="sql.export">Download active Database</li>
+          <li class="separator"></li>
+          <li data-cmd="close">Close window</li>
+          <li class="separator"></li>
+          <li data-cmd="faqs">Open FAQs page</li>
+          <li data-cmd="sqlite -> help">Open SQLite help</li>
+          <li data-cmd="math.js -> help">Open Math.js help</li>
+          <li class="separator"></li>
+          <li data-cmd="fullscreen">Toggle Fullscreen</li>
+        </ul>
       </div>
-      <span flex="1" style="min-width: 10px"></span>
-      <div><select id="dbs">
-        <option disabled selected>Drag &amp; Drop a DB</option>
-      </select></div>
+      <div class="list">
+        <span hbox align="center">Manage</span>
+        <ul>
+          <li data-cmd="box.clean">Clear Window</li>
+          <li class="separator"></li>
+          <li data-value='db_new("my_database.sqlite")'>Create a new database<span>db_new</span></li>
+          <li data-value='db_download(%id%)'>Download selected database<span>db_download</span></li>
+          <li data-value='db_remove(%id%)'>Close an existing database<span>db_remove</span></li>
+          <li class="separator"></li>
+          <li data-value="values:1">Inspect selected database<span>SELECT</span></li>
+          <li data-value="PRAGMA table_info(table_name)">Inspect table structure<span>PRAGMA</span></li>
+          <li data-value="values:2">Database info<span>PRAGMA</span></li>
+          <li data-value='VACUUM'>Optimize the database<span>VACUUM</span></li>
+          <li class="separator"></li>
+          <li data-cmd="open.js.editor">Open JavaScript editor</li>
+        </ul>
+      </div>
+      <div class="list">
+        <span hbox align="center">History</span>
+        <ul id="history">
+          <li class="separator"></li>
+          <li data-cmd="history.clear">Clear history</li>
+        </ul>
+      </div>
+      <div class="list">
+        <span hbox align="center">SQLite</span>
+        <ul>
+          <li class="disabled">Export</li>
+          <li data-value='values:3'>Export to math.js as a matrix<span>SELECT</span></li>
+          <li class="disabled">Managing Tables</li>
+          <li data-value='values:4'>Create a new table<span>CREATE</span></li>
+          <li data-value='ALTER TABLE table_name RENAME TO new_name'>Rename a table<span>ALTER</span></li>
+          <li data-value='ALTER TABLE table ADD COLUMN column_definition'>Add a new column to a table<span>ALTER</span></li>
+          <li data-value='ALTER TABLE table DROP COLUMN column_name'>Drop an existing column in a table<span>ALTER</span></li>
+          <li data-value='DROP TABLE [IF EXISTS] table_name;'>Drop a table and its data<span>DROP</span></li>
+          <li class="disabled">Managing Indexes</li>
+          <li data-value='values:31'>Creating an index<span>CREATE</span></li>
+          <li data-value='CREATE INDEX index_name ON table_name(expression)'>Create an expression index<span>CREATE</span></li>
+          <li class="disabled">Querying Data</li>
+          <li data-value='SELECT * FROM table_name limit 100'>Query all data from a table<span>SELECT</span></li>
+          <li data-value='values:5'>Query data from the specified column<span>SELECT</span></li>
+          <li data-value='values:6'>Query unique rows<span>SELECT</span></li>
+          <li data-value='values:7'>Query rows using a WHERE clause<span>SELECT</span></li>
+          <li data-value='values:30'>Rename column in the query’s output<span>SELECT</span></li>
+          <li data-value='values:8'>Query data from multiple tables<span>SELECT</span></li>
+          <li data-value='values:9'>Count rows returned by a query<span>SELECT</span></li>
+          <li data-value='values:10'>Sort rows using ORDER BY clause<span>SELECT</span></li>
+          <li data-value='values:11'>Group rows using GROUP BY clause<span>SELECT</span></li>
+          <li data-value='values:12'>Filter group of rows using HAVING clause<span>SELECT</span></li>
+          <li class="disabled">Changing Data</li>
+          <li data-value='values:13'>Insert a row into a table<span>INSERT</span></li>
+          <li data-value='values:14'>Insert multiple rows into a table<span>INSERT</span></li>
+          <li data-value='values:15'>Update all rows in a table<span>UPDATE</span></li>
+          <li data-value='values:16'>Update rows that match with a condition<span>UPDATE</span></li>
+          <li data-value='DELETE FROM table'>Delete all rows in a table<span>DELETE</span></li>
+          <li data-value='values:17'>Delete rows specified by a condition<span>DELETE</span></li>
+          <li class="disabled">Search</li>
+          <li data-value="values:18">Search using LIKE operator<span>SELECT</span></li>
+          <li data-value="values:19">Search using full-text search<span>SELECT</span></li>
+        </ul>
+      </div>
+      <div class="list">
+        <span hbox align="center">Math.js</span>
+        <ul>
+          <li data-value='values:20'>Arrays and matrices<span>matrix</span></li>
+          <li data-value="map(1:10, f(x) = x + 2)">Use functions<span>map</span></li>
+          <li data-value="values:32">Use SQL function<span>sql</span></li>
+          <li data-value="values:33">Use SQL function (parametric)<span>sql</span></li>
+          <li data-value="values:34">Use SQL function (parametric array)<span>sql</span></li>
+          <li data-value='values:21'>Zeros function<span>zeros</span></li>
+          <li data-value='values:22'>Ones function<span>ones</span></li>
+          <li data-value='values:23'>Range function<span>range</span></li>
+          <li data-value='values:24'>Size and Dimensions<span>size</span></li>
 
-    </div>
-    <div id="viewer" flex="1">
-      <template id="command-box">
-        <div data-id="command-box" hbox data-index="#1">
-          <span></span>
-          <div flex="1" vbox>
-            <textarea title="Enter: Run a math.js or SQLite command&#013;Shift + Enter: Go to the next line" spellcheck="false" placeholder="Enter math.js or SQLite commands"></textarea>
-            <div data-id=result vbox align="start"></div>
-          </div>
-        </div>
-      </template>
-      <div id="box"></div>
-    </div>
-
-    <div id=notify hbox>
-      <span></span>
-      <span flex=1>Loading...</span>
-    </div>
-
-    <div id="editor" data-visible=false hbox align=end>
-      <textarea rows="6" spellcheck="false"></textarea>
-      <div vbox>
-        <input type="button" value="Close" data-cmd="close" title="Press Escape instead"/>
-        <input type="button" value="Execute" data-cmd="execute" title="Press Meta + E instead"/>
+        </ul>
+      </div>
+      <div class="list">
+        <span hbox align="center">Chart.js</span>
+        <ul>
+          <li data-value='values:25'>Line chart<span>plot</span></li>
+          <li data-value='values:26'>Time chart<span>plot</span></li>
+          <li data-value='values:35'>Scatter chart<span>plot</span></li>
+          <li data-value='values:27'>Bar chart<span>plot</span></li>
+          <li data-value='values:28'>Pie chart<span>plot</span></li>
+          <li data-value='values:29'>Doughnut chart<span>plot</span></li>
+        </ul>
       </div>
     </div>
+    <span flex="1" style="min-width: 10px"></span>
+    <div><select id="dbs">
+      <option disabled selected>Drag &amp; Drop a DB</option>
+    </select></div>
 
-    <script src="EventEmitter.js"></script>
-    <script type="module" src="api/api.js"></script>
-  </body>
+  </div>
+  <div id="viewer" flex="1">
+    <template id="command-box">
+      <div data-id="command-box" hbox data-index="#1">
+        <span></span>
+        <div flex="1" vbox>
+          <textarea title="Enter: Run a math.js or SQLite command&#013;Shift + Enter: Go to the next line" spellcheck="false" placeholder="Enter math.js or SQLite commands"></textarea>
+          <div data-id=result vbox align="start"></div>
+        </div>
+      </div>
+    </template>
+    <div id="box"></div>
+  </div>
+
+  <div id=notify hbox>
+    <span></span>
+    <span flex=1>Loading...</span>
+  </div>
+
+  <div id="editor" data-visible=false hbox align=end>
+    <textarea rows="6" spellcheck="false"></textarea>
+    <div vbox>
+      <input type="button" value="Close" data-cmd="close" title="Press Escape instead"/>
+      <input type="button" value="Execute" data-cmd="execute" title="Press Meta + E instead"/>
+    </div>
+  </div>
+
+  <script src="EventEmitter.js"></script>
+  <script type="module" src="api/api.js"></script>
+</body>
 </html>

@@ -11,7 +11,7 @@ window.notify = msg => {
     iconUrl: '/data/icons/48.png',
     title: chrome.runtime.getManifest().name,
     message: msg
-  });
+  }, id => setTimeout(() => chrome.notifications.clear(id), 3000));
 };
 
 // statements = ['query', 'query $[n][m][y][x]', {query: 'query'}]

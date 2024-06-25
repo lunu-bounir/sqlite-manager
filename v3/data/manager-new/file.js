@@ -95,7 +95,7 @@ document.getElementById('active').addEventListener('change', e => {
   callbacks.activate.forEach(c => c(e.target.selectedOptions[0].file));
 });
 
-const process = files => {
+const proceed = files => {
   const csvs = files.filter(f => f.type.startsWith('text/csv'));
   const dbs = files.filter(f => f.type.startsWith('text/csv') === false);
 
@@ -111,14 +111,14 @@ document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', e => {
   e.preventDefault();
 
-  process([...e.dataTransfer.files]);
+  proceed([...e.dataTransfer.files]);
 });
 document.getElementById('file').addEventListener('click', () => {
   const input = document.createElement('input');
   input.multiple = true;
   input.type = 'file';
   input.onchange = () => {
-    process([...input.files]);
+    proceed([...input.files]);
   };
   input.click();
 });
