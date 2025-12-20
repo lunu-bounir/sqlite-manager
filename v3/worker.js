@@ -1,37 +1,38 @@
 'use strict';
 
-chrome.action.onClicked.addListener(() => chrome.storage.local.get({
-  interface: 'manager-new'
-}, prefs => {
+chrome.action.onClicked.addListener(async () => {
+  const prefs = await chrome.storage.local.get({
+    interface: 'manager-new'
+  });
   chrome.tabs.create({
     url: '/data/' + prefs.interface + '/index.html'
   });
-}));
+});
 
 {
-  const start = () => {
+  const start = async () => {
     if (start.done) {
       return;
     }
     start.done = true;
-    chrome.storage.local.get({
+
+    const prefs = await chrome.storage.local.get({
       interface: 'manager-new'
-    }, prefs => {
-      chrome.contextMenus.create({
-        id: 'manager-new',
-        contexts: ['action'],
-        title: 'use new interface',
-        type: 'radio',
-        checked: prefs.interface === 'manager-new'
-      }, () => chrome.runtime.lastError);
-      chrome.contextMenus.create({
-        id: 'manager-old',
-        contexts: ['action'],
-        title: 'use old interface',
-        type: 'radio',
-        checked: prefs.interface === 'manager-old'
-      }, () => chrome.runtime.lastError);
     });
+    chrome.contextMenus.create({
+      id: 'manager-new',
+      contexts: ['action'],
+      title: 'use new interface',
+      type: 'radio',
+      checked: prefs.interface === 'manager-new'
+    }, () => chrome.runtime.lastError);
+    chrome.contextMenus.create({
+      id: 'manager-old',
+      contexts: ['action'],
+      title: 'use old interface',
+      type: 'radio',
+      checked: prefs.interface === 'manager-old'
+    }, () => chrome.runtime.lastError);
   };
   chrome.runtime.onStartup.addListener(start);
   chrome.runtime.onInstalled.addListener(start);

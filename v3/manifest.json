@@ -5,14 +5,14 @@
   "description": "Manage, manipulate, and plot one or more SQLite databases and optionally import and export records to a CSV table",
   "offline_enabled": true,
   "icons": {
-    "16": "/data/icons/16.png",
-    "19": "/data/icons/19.png",
-    "32": "/data/icons/32.png",
-    "38": "/data/icons/38.png",
-    "48": "/data/icons/48.png",
-    "64": "/data/icons/64.png",
-    "128": "/data/icons/128.png",
-    "256": "/data/icons/256.png"
+    "16": "data/icons/16.png",
+    "19": "data/icons/19.png",
+    "32": "data/icons/32.png",
+    "38": "data/icons/38.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png",
+    "256": "data/icons/256.png"
   },
   "permissions": [
     "storage",
@@ -23,13 +23,13 @@
     "*://*/*"
   ],
   "sandbox": {
-    "pages": ["/data/manager-old/sandbox.html"]
+    "pages": ["data/manager-old/sandbox.html"]
   },
-
   "action": {},
   "homepage_url": "https://webextension.org/listing/sqlite-manager.html",
   "background": {
-    "service_worker": "worker.js"
+    "service_worker": "worker.js",
+    "scripts": ["worker.js"]
   },
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
